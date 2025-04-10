@@ -1,3 +1,4 @@
+![Eddited version of a conceptual drawing by ESO (https://elt.eso.org/instrument/METIS/)](https://github.com/user-attachments/assets/c8832d76-f818-46ea-ad73-00c0dc5a0efb)
 # SIGMAS 
 ## Simulation Interface for Generating METIS Astronomical Spectra
 ## Summary
