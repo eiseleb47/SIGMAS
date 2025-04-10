@@ -1,4 +1,4 @@
-![Eddited version of a conceptual drawing by ESO (https://elt.eso.org/instrument/METIS/)](https://github.com/user-attachments/assets/c8832d76-f818-46ea-ad73-00c0dc5a0efb)
+![Edited version of a conceptual drawing by ESO (https://elt.eso.org/instrument/METIS/)](https://github.com/user-attachments/assets/c8832d76-f818-46ea-ad73-00c0dc5a0efb)
 # SIGMAS 
 ## Simulation Interface for Generating METIS Astronomical Spectra
 ## Summary
@@ -12,3 +12,8 @@ SIGMAS makes use of ScopeSim and it's dependencies for the backend simulation an
 - As a software engineer working on the data reduction pipeline for the METIS instrument, I want to create my own simulation data, so that I can test my pipeline in different use cases.
 - As an amateur astronomer using an older laptop, I want to limit the resolution and complexity of the simulations so that I can still use the tool without my system becoming unresponsive.
 - As a user trying to load a previously saved simulation setup, I want the GUI to notify me if the input file is incomplete or contains errors, so that I can correct the issue without the program crashing or producing invalid results.
+## Examples
+The user is expected to start the GUI by either starting the script from a file manager or by entering the following command in the terminal:
+```
+./sigma
+```
