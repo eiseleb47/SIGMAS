@@ -1,23 +1,15 @@
-.funky {
-    padding: 10px;
-    border: 2px solid #007BFF;
-    border-radius: 8px;
-    background-color: #f0f8ff;
-    font-size: 16px;
-    outline: none; /* removes default focus outline */
-    transition: border-color 0.3s ease;
-    }
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 10px 20px;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: rgb(98, 42, 201);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+.dropdown {
+    float: right;
+    margin-right: 5%;
+    
+}
+.dropdown_label{
+    float: right;
+    margin-right: 5%;
 }
 
-.custom-file-upload:hover {
-    background-color: #0056b3;
+.submit {
+    float: left;
+    margin-left: 45%;
+    margin-top: 5%;
 }

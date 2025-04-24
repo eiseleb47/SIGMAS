@@ -3,7 +3,7 @@ from scopesim_templates.stellar.clusters import cluster
 from scopesim_templates.extragalactic.galaxies import elliptical
 from astropy import units as u
 from astropy.io import fits
-from utils import get_scopesim_inst_pkgs_path
+from simulations.utils import get_scopesim_inst_pkgs_path
 
 def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     """
