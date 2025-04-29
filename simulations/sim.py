@@ -62,7 +62,4 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     hdu = metis.readout(detector_readout_mode="auto")[0]
     
     # Add support for Eso keywords here
-
-    #hdu.writeto("output.fits", overwrite=True)
-    #print(hdu[0])
     return hdu

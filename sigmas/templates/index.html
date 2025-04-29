@@ -3,7 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="../static/styles.css" rel="stylesheet"/>
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}"/>
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='js9.css')}}"/>
+        <script src="{{ url_for('static', filename='js9support.min.js') }}""></script>
+        <script src="{{ url_for('static', filename='js9.min.js') }}""></script>
+        <script src="{{ url_for('static', filename='js9plugins.js') }}""></script>
+        <!-- optional site preferences -->
+        <script src="{{ url_for('static', filename='js9prefs.js') }}""></script>
+        <!script src="{{ url_for('static', filename='menubar.js') }}"><!/script>
+        <!script src="{{ url_for('static', filename='info.js') }}"><!/script>
         <title>SIGMAS</title>
     </head>
     <body>
@@ -19,7 +28,7 @@
         {% endwith %}
         <form action="/simulation" method="post" enctype="multipart/form-data">
           <p>
-            Please input your Simulation Parameters:
+            Please choose your Simulation Parameters:
           </p>
           <label for="val1">Exposure Time:</label>
           <input type="number" id="val1" name="exposure_time" class="funky">
@@ -46,5 +55,14 @@
           <br>
           <input type="submit" value="Start Simulation" class="submit">
         </form>
+        <br>
+        <div class="JS9" data-width="256px" data-height="256px" data-js9init="false">
+          {% if 1==1  %}
+          <script>JS9.init();</script>
+          {% endif  %}
+        </div>
+        <! div class="JS9Statusbar">
+        <!/div>
+
     </body>
 </html>

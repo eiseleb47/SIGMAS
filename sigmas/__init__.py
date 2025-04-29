@@ -2,6 +2,8 @@ import os
 import tempfile
 from pathlib import Path
 from simulations.sim import Simulate
+from simulations.utils import save_fits
+from astropy.io import fits
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
@@ -29,11 +31,33 @@ def create_app(test_config=None):
 
             try:
                 hdu = Simulate(variables["mode"], variables["exposure_time"], variables["source"])
-                flash('Simulation finished successfully!')
+
+                temp_dir = tempfile.gettempdir()
+                fits_file_path = os.path.join(temp_dir, "simulation_result.fits")
+                new_fits_file_path = os.path.join(temp_dir, "simulation_result_hdu1.fits")
+                hdu.writeto(fits_file_path, overwrite=True)
+                print(hdu.header)
+
+                if os.path.exists(fits_file_path):
+                    print(f"FITS file created at: {fits_file_path}")
+                else:
+                    print("FITS file was not created!")
+
+                flash('Simulation completed successfully!')
+
+                return render_template('index.html', fits_url=url_for('display_fits'))
+
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')
                 return redirect(url_for('home'))
 
         return render_template('index.html')
-    
+    @app.route('/display_fits')
+    def display_fits():
+        temp_dir = tempfile.gettempdir()
+        fits_path = os.path.join(temp_dir, "simulation_result_hdu1.fits")
+        if not os.path.exists(fits_path):
+            print("FITS file not found in /display_fits route!")
+            return "FITS file not found", 404
+        return send_file(fits_path, mimetype='application/fits')
     return app

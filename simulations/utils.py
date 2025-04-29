@@ -8,7 +8,7 @@ def get_scopesim_inst_pkgs_path():
     # Look for inst_pkgs in parent directories
     return package_path if Path(package_path).exists() else None
 
-def save_fits(file):
+def save_fits(file, path=""):
     '''Save a fits file to disk'''
-    file.writeto("output.fits", overwrite=True)
+    file.writeto(path + "output.fits", overwrite=True)
     return None
