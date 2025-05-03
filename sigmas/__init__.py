@@ -41,7 +41,7 @@ def create_app(test_config=None):
 
                 flash('Simulation completed successfully!')
 
-                return render_template('index.html', fits_url=url_for('display_fits'))
+                return render_template('index.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
 
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')

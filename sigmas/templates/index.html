@@ -39,8 +39,8 @@
               <label for="source" class="dropdown_label">Choose your source:</label>
               <br>
               <select name="source" id="source" class="dropdown">
-                <option value="star">Star</option>
-                <option value="agn">AGN</option>
+                <option value="star">Star Field</option>
+                <option value="agn">Elliptical Galaxy</option>
               </select>
               <br>
               <br>
@@ -60,6 +60,7 @@
 
         {% if fits_url %}
         <div class="js9-container">
+          Simulated detector image of a {{ src }} in {{ mode }}.
           <div class="JS9" id="JS9" data-width="600px" data-height="600px"></div>
         </div>
         <!-- Load FITS file after page is fully loaded -->
