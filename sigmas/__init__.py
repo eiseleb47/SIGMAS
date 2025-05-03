@@ -32,7 +32,6 @@ def create_app(test_config=None):
 
                 temp_dir = tempfile.gettempdir()
                 fits_file_path = os.path.join(temp_dir, "simulation_result.fits")
-                new_fits_file_path = os.path.join(temp_dir, "simulation_result_hdu1.fits")
                 hdu.writeto(fits_file_path, overwrite=True)
 
                 if os.path.exists(fits_file_path):
@@ -49,12 +48,12 @@ def create_app(test_config=None):
                 return redirect(url_for('home'))
 
         return render_template('index.html')
-    @app.route('/display_fits')
+    @app.route('/display_fits', methods=['POST', 'GET'])
     def display_fits():
         temp_dir = tempfile.gettempdir()
-        fits_path = os.path.join(temp_dir, "simulation_result_hdu1.fits")
+        fits_path = os.path.join(temp_dir, "simulation_result.fits")
         if not os.path.exists(fits_path):
             print("FITS file not found in /display_fits route!")
             return "FITS file not found", 404
-        return send_file(fits_path, mimetype='application/fits')
+        return send_file(fits_path, mimetype='image/fits')
     return app
