@@ -1,15 +1,20 @@
-.dropdown {
-    float: right;
-    margin-right: 5%;
-    
+h1 {
+    text-align: center;
+    font-size: x-large;
 }
-.dropdown_label{
-    float: right;
-    margin-right: 5%;
+.form-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    gap: 1rem;
 }
-
-.submit {
-    float: left;
-    margin-left: 45%;
-    margin-top: 5%;
+.submit-row{
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+}
+.js9-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
 }

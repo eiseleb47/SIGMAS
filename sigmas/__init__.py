@@ -17,7 +17,6 @@ def create_app(test_config=None):
 
     @app.route('/simulation', methods=['POST'])
     def sim():
-        flash('Simulation is running...')
         if request.method == 'POST':
             exposure_time = request.form.get('exposure_time')
             if not exposure_time:
@@ -26,8 +25,7 @@ def create_app(test_config=None):
             variables = {
             "mode": request.form.get('mode'),
             "source": request.form.get('source'),
-            "exposure_time": exposure_time#float(request.form.get('exposure_time'))
-            }
+            "exposure_time": exposure_time}
 
             try:
                 hdu = Simulate(variables["mode"], variables["exposure_time"], variables["source"])
@@ -36,7 +34,6 @@ def create_app(test_config=None):
                 fits_file_path = os.path.join(temp_dir, "simulation_result.fits")
                 new_fits_file_path = os.path.join(temp_dir, "simulation_result_hdu1.fits")
                 hdu.writeto(fits_file_path, overwrite=True)
-                print(hdu.header)
 
                 if os.path.exists(fits_file_path):
                     print(f"FITS file created at: {fits_file_path}")
