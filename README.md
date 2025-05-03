@@ -6,7 +6,13 @@ SIGMAS aims to simplify the creation of spectral simulations in different modes 
 
 It is intended for Astronomers or Students who are not familiar with the intricacies of ScopeSim and simply require basic simulated data without control over every parameter.
 
-SIGMAS makes use of ScopeSim and it's dependencies for the backend simulation and Flask (subject to change) as a front-end framework for the web based GUI.
+SIGMAS makes use of ScopeSim and it's dependencies as well as ScopeSim_Templates for the backend simulation and Flask as a framework for the web based GUI.
+## Requirements
+- ```ScopeSim```
+
+- ```ScopeSim_Templates```
+
+- ```Flask```
 ## User Stories
 - As a university student, I want to create and look at simulated spectrographic data so that I can understand better how an Echelle Spectrograph works.
 - As a software engineer working on the data reduction pipeline for the METIS instrument, I want to create my own simulation data, so that I can test my pipeline in different use cases.
@@ -14,6 +20,8 @@ SIGMAS makes use of ScopeSim and it's dependencies for the backend simulation an
 - As a user trying to load a previously saved simulation setup, I want the GUI to notify me if the input file is incomplete or contains errors, so that I can correct the issue without the program crashing or producing invalid results.
 ## Examples
 The user is expected to start the GUI by either starting the script from a file manager or by entering the following command in the terminal:
-```
-./sigma
+```bash
+# Assuming you are in the sigmas root directory
+source /path/to/your/venv
+flask --app sigmas run
 ```
