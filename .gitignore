@@ -12,6 +12,7 @@
 *.png
 *.fits
 *.Identifier
+*.vscode
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

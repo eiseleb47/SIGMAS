@@ -36,7 +36,7 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     metis["telescope_reflection"].include = False
 
     if object is not None:
-        if object == "star":
+        if object == "Star Field":
             src = scopesim_templates.stellar.stars(
                 amplitudes = starFieldM,
                 x = starFieldX,
@@ -44,7 +44,7 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
                 filter_name = "Ks",
                 spec_types = starFieldT
             )
-        if object == "agn":
+        if object == "Elliptical Galaxy":
             src = elliptical(
             sed = "brown/NGC4473",
             z = 0,

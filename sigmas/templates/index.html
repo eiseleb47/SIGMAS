@@ -17,15 +17,6 @@
     <body>
         <h1>SIGMAS - Simulation Interface for Generating METIS Astronomical Spectra</h1>
         <br>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-        {% endwith %}
         <form action="/simulation" method="post" enctype="multipart/form-data">
           <div class="form-top">
             <div class="form-left">
@@ -39,8 +30,8 @@
               <label for="source" class="dropdown_label">Choose your source:</label>
               <br>
               <select name="source" id="source" class="dropdown">
-                <option value="star">Star Field</option>
-                <option value="agn">Elliptical Galaxy</option>
+                <option value="Star Field">Star Field</option>
+                <option value="Elliptical Galaxy">Elliptical Galaxy</option>
               </select>
               <br>
               <br>
@@ -60,8 +51,9 @@
 
         {% if fits_url %}
         <div class="js9-container">
-          Simulated detector image of a {{ src }} in {{ mode }}.
-          <div class="JS9" id="JS9" data-width="600px" data-height="600px"></div>
+          <div class="sim_text">Simulated detector image of a {{ src }} in {{ mode }} mode.</div>
+          <div class="JS9Menubar" data-width="420px"></div>
+          <div class="JS9" id="JS9" data-width="420px" data-height="420px"></div>
         </div>
         <!-- Load FITS file after page is fully loaded -->
         <script>

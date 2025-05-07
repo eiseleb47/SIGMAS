@@ -1,20 +1,122 @@
+:root {
+    /* Catppuccin Mocha palette */
+    --base: #303446;
+    --mantle: #292c3c;
+    --crust: #232634;
+    --text: #c6d0f5;
+    --subtext1: #b5bfe2;
+    --surface0: #414559;
+    --surface1: #51576d;
+    --blue: #8caaee;
+    --lavender: #babbf1;
+    --pink: #f4b8e4;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrainsMono-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+    background-color: var(--base);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace; 
+    margin: 0;
+    padding: 2rem;
+}
+
 h1 {
     text-align: center;
     font-size: x-large;
+    color: var(--lavender);
+    margin-bottom: 2rem;
 }
-.form-top{
+
+.form-top {
     display: flex;
     justify-content: space-between;
     align-items: top;
     gap: 1rem;
 }
-.submit-row{
+
+.form-left{
+    margin-left: 9%;
+}
+
+.form-right{
+    margin-right: 9%;
+}
+
+.submit-row {
     display: flex;
     justify-content: center;
     margin-top: 1em;
 }
-.js9-container{
+
+
+input[type="number"], select {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+input[type="submit"] {
+    background-color: var(--blue);
+    color: var(--base);
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--lavender);
+}
+
+.js9-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-items: flex-start;
+    align-items: center;
     margin-top: 2rem;
+    background-color: var(--mantle);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.sim_text {
+    margin-bottom: 1em;
+    color: var(--subtext1);
+    text-align: center;
+}
+
+label {
+    color: var(--subtext1);
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* JS9 specific overrides */
+.JS9Menubar {
+    background-color: var(--surface0) !important;
+    border-radius: 8px 8px 0 0;
+}
+
+.JS9 {
+    background-color: var(--surface0) !important;
+    border-radius: 0 0 8px 8px;
 }
