@@ -27,3 +27,7 @@ dependencies = [
 
 [project.scripts]
 sigmas = "sigmas.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["sigmas"]

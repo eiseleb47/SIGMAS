@@ -13,6 +13,10 @@ SIGMAS makes use of ScopeSim and it's dependencies as well as ScopeSim_Templates
 - ```ScopeSim_Templates```
 
 - ```Flask```
+
+- ```Astropy```
+
+- ```Numpy```
 ## User Stories
 - As a university student, I want to create and look at simulated spectrographic data so that I can understand better how an Echelle Spectrograph works.
 - As a software engineer working on the data reduction pipeline for the METIS instrument, I want to create my own simulation data, so that I can test my pipeline in different use cases.
@@ -22,6 +26,7 @@ SIGMAS makes use of ScopeSim and it's dependencies as well as ScopeSim_Templates
 The user is expected to start the GUI by either starting the script from a file manager or by entering the following command in the terminal:
 ```bash
 # Assuming you are in the sigmas root directory
-source /path/to/your/venv
-flask --app sigmas run
+pip install -e .
+# Run the webserver and open a new browser tab
+sigmas
 ```

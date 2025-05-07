@@ -1,8 +1,8 @@
 import os
 import tempfile
 from pathlib import Path
-from simulations.sim import Simulate
-from simulations.utils import save_fits
+from .simulations.sim import Simulate
+from .simulations.utils import save_fits
 from astropy.io import fits
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for

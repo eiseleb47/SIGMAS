@@ -1,6 +1,0 @@
-flask
-scopesim
-scopesim_templates
-astropy
-numpy
-click
