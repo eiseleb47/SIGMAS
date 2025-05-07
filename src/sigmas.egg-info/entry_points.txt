@@ -1,0 +1,2 @@
+[console_scripts]
+sigmas = sigmas.cli:main

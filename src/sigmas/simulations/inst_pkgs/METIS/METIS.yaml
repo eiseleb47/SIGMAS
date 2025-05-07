@@ -1,0 +1,80 @@
+---
+### METIS Instrument common effects
+
+object: instrument
+alias: INST
+name: METIS
+description: base configuration for METIS
+date_modified: 2022-02-21
+changes:
+  - 2021-12-16 (OC) temperature changed to align with cfo
+  - 2021-12-16 (OC) slit files renamed to include slit width
+  - 2022-01-05 (OC) add ADC wheel
+  - 2022-02-20 (OC) pupil_transmission now an OBS parameter
+  - 2022-02-21 (OC) name change cfo effect
+
+properties:
+  temperature: -206
+
+effects:
+  - name: common_fore_optics
+    description: surface list for METIS common fore optics
+    class: SurfaceList
+    kwargs:
+      filename: LIST_METIS_mirrors_cfo.dat
+
+  # METIS ADCs are conjugated to ZD=25 and 41 degs (Airmass 1.10, 1.33)
+  - name: adc_wheel
+    description: collection of atmospheric dispersion correctors
+    class: ADCWheel
+    kwargs:
+      adc_names:
+        - const_90
+      filename_format: TER_ADC_{}.dat
+      current_adc: "!OBS.adc"
+      include: "!OBS.adc"
+
+  - name: slit_wheel
+    description: collection of field masks and slits
+    class: SlitWheel
+    kwargs:
+      slit_names:
+        - A-19_0
+        - B-28_6
+        - C-38_1
+        - D-57_1
+        - E-114_2
+      filename_format: MASK_slit_{}.dat
+      current_slit: "!OBS.slit"
+      include: "!OBS.slit"
+
+  - name: cold_stop
+    description: pupil transmission with respect to full aperture
+    class: PupilTransmission
+    include: True
+    kwargs:
+      transmission: "!OBS.pupil_transmission"
+      minimum_throughput: !!float 0.
+
+  - name : common_fits_keywords
+    decription : FITS keywords common to all modes
+    class : ExtraFitsKeywords
+    include : True
+    kwargs :
+      filename: headers/FITS_common_keywords.yaml
+
+#  - name : metis_adc_residuals
+#    class : AtmosphericDispersionCorrection
+#    include : False
+#    kwargs:
+#      altitude: "!ATMO.altitude"
+#      longitude: "!ATMO.longitude"
+#      latitude: "!ATMO.latitude"
+#      airmass: "!OBS.airmass"
+#      temperature: "!ATMO.temperature"
+#      humidity: "!ATMO.humidity"
+#      pressure: "!ATMO.pressure"
+#      pupil_angle: "!OBS.pupil_angle"
+#      efficiency: 1
+#      wave_mid: "!SIM.spectral.wave_mid"
+#      quick_adc: True

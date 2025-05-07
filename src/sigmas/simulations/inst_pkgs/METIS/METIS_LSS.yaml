@@ -1,0 +1,47 @@
+---
+## METIS long-slit spectroscopy
+
+object: instrument
+alias: INST
+name: METIS_LSS
+description: additional effects for METIS long-slit spectroscopy
+date_modified: 2022-01-12
+changes:
+  - 2022-01-12 (OC) changed spectral_resolution to _bin_width
+
+properties:
+  decouple_detector_from_sky_headers: True  # needed for slit spectroscopy
+
+effects:
+  #  - name: blaze_function
+  #    description: grating efficiency
+  #    class: TERCurve
+  #    kwargs:
+  #      filename: TER_blaze_L.dat
+  - name: grating_efficiency
+    description: grating efficiency
+    class: SpectralEfficiency
+    include: false
+    kwargs:
+      filename: "!OBS.efficiency_file"
+
+  - name: spectral_traces
+    description: list of spectral order trace geometry on the focal plane
+    class: SpectralTraceList
+    kwargs:
+      filename: "!OBS.trace_file"
+      wave_colname: "wavelength"
+      s_colname: "xi"
+      col_number_start: 1
+
+---
+### default simulation parameters needed for a METIS simulation
+object: simulation
+alias: SIM
+name: METIS_simulation_parameters
+description: RC simulation parameters which need to change for a METIS run
+
+properties:
+  spectral:
+    spectral_bin_width: !!float 5E-4   # microns, defines fov wavelengths
+    spectral_resolution: 5000          # defines skycalc resolution

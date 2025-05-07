@@ -1,0 +1,94 @@
+---
+### METIS LM IMAGING MODE
+
+object: instrument
+alias: INST
+name: METIS_IMG_LM
+description: base configuration for METIS LM band imager
+date_modified: 2022-02-21
+changes:
+  - 2021-12-16 (OC) filter_file_format moved here
+  - 2022-01-11 (OC) change default bkg_width to 0
+  - 2022-01-12 (OC) change default bkg_width to -1
+  - 2022-02-17 (OC) increase spectral_bin_width for imaging
+  - 2022-02-21 (OC) renamed effects
+
+properties:
+  pixel_scale: 0.00547         # arcsec / pixel, METIS_1097
+  plate_scale: 0.30389         # arcsec / mm
+  filter_file_format: "filters/TC_filter_{}.dat"
+
+effects:
+  - name: img_lm_optics
+    description: list of extra mirrors in METIS LM imager
+    class: SurfaceList
+    kwargs:
+      filename: LIST_METIS_mirrors_img_lm.dat
+
+  - name: filter_wheel
+    description: IMG_LM science filters (E-REP-MPIA-MET-1008_1-0)
+    class: FilterWheel
+    kwargs:
+      filter_names:
+        # 18 positions (E-REP-MPIA-MET-1008_1-0)
+        - open
+        - Lp
+        - short-L
+        - L_spec
+        - Mp
+        - M_spec
+        - Br_alpha
+        - Br_alpha_ref
+        - PAH_3.3
+        - PAH_3.3_ref
+        - CO_1-0_ice
+        - CO_ref
+        - H2O-ice
+        - IB_4.05
+        - HCI_L_short
+        - HCI_L_long
+        - HCI_M
+      filename_format: "!INST.filter_file_format"
+      current_filter: "!OBS.filter_name"
+      minimum_throughput: !!float 0.
+      outer: 56                               # E-REP-MPIA-MET-1008_1-0
+      outer_unit: "mm"
+
+  - name: nd_filter_wheel
+    class: FilterWheel
+    description: IMG_LM neutral density filters (E-REP-MPIA-MET-1008_1-0)
+    kwargs:
+      filter_names:
+        # 11 positions (E-REP-MPIA-MET-1008_1-0)
+        # OD = optical density, transmissivity 10^{-OD}.
+        - open
+        - ND_OD1
+        - ND_OD2
+        - ND_OD3
+        - ND_OD4
+        - ND_OD5
+      filename_format: "!INST.filter_file_format"
+      current_filter: "!OBS.nd_filter_name"
+      minimum_throughput: !!float 0.
+      outer: 56                                # E-REP-MPIA-MET-1008_1-0
+      outer_unit: "mm"
+
+  - name: psf
+    description: field constant, wavelength dependent PSF for imaging mode
+    class: FieldConstantPSF
+    kwargs:
+      filename: "!OBS.psf_file"
+      wave_key: "WAVELENG"
+      bkg_width: -1
+
+---
+### default simulation parameters needed for a METIS simulation
+object: simulation
+alias: SIM
+name: METIS_simulation_parameters
+description: RC simulation parameters which need to change for a METIS run
+
+properties:
+  spectral:
+    spectral_bin_width: !!float 1E-3   # microns, defines fov wavelengths
+    spectral_resolution: 5000          # defines skycalc resolution
