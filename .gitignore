@@ -10,7 +10,6 @@
 *.userosscache
 *.sln.docstates
 Idea.png
-*.fits
 *.Identifier
 *.vscode
 *.egg-info
