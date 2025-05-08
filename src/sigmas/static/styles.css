@@ -14,14 +14,14 @@
 
 @font-face {
     font-family: 'JetBrains Mono';
-    src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
+    src: url('/static/fonts/JetBrainsMono-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'JetBrains Mono';
-    src: url('../fonts/JetBrainsMono-Bold.woff2') format('woff2');
+    src: url('/static/fonts/JetBrainsMono-Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
 }
@@ -44,16 +44,31 @@ h1 {
 .form-top {
     display: flex;
     justify-content: space-between;
-    align-items: top;
+    align-items: flex-start;
     gap: 1rem;
 }
 
 .form-left{
+    display: flex;
     margin-left: 9%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1em;
 }
 
 .form-right{
+    display: flex;
     margin-right: 9%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1em;
+}
+
+.choose{
+    margin-left: 9%;
+    margin-bottom: 2rem;
 }
 
 .submit-row {
