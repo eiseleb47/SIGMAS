@@ -4,7 +4,7 @@ from scopesim_templates.stellar.clusters import cluster
 from scopesim_templates.extragalactic.galaxies import elliptical
 from astropy import units as u
 from astropy.io import fits
-from .utils import get_scopesim_inst_pkgs_path
+from .utils import get_scopesim_inst_pkgs_path, ensure_packages_installed
 from .utils import starFieldM, starFieldX, starFieldY, starFieldT
 
 def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
@@ -22,6 +22,8 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     
     # Set up the simulation
     sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()
+
+    ensure_packages_installed()
 
     cmds = sim.UserCommands(use_instrument="METIS", set_modes=[mode])
     cmds["!OBS.dit"] = float(exp)/4

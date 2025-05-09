@@ -15,6 +15,11 @@ Idea.png
 *.egg-info
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+TODO
+inst_pkgs/
+**/inst_pkgs/
+src/sigmas/simulations/inst_pkgs/
+/src/sigmas/simulations/inst_pkgs/
 
 # Mono auto generated files
 mono_crash.*

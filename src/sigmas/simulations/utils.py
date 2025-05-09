@@ -1,18 +1,41 @@
 from pathlib import Path
-import importlib.util
 from astropy.io import fits
 import numpy as np
+import logging
+import scopesim as sim
+import os
 
 def get_scopesim_inst_pkgs_path():
     """Find the inst_pkgs directory relative to scopesim installation"""
-    package_path = str(Path(__file__).parent / "inst_pkgs")
-    # Look for inst_pkgs in parent directories
-    return package_path if Path(package_path).exists() else None
+    package_dir = Path(__file__).parent / "inst_pkgs"
+    package_dir.mkdir(exist_ok=True, parents=True)
+    
+    if not package_dir.exists():
+        raise RuntimeError(f"Failed to create directory: {package_dir}")
+    if not os.access(package_dir, os.W_OK):
+        raise RuntimeError(f"Directory not writable: {package_dir}")
+        
+    return str(package_dir)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk'''
     file.writeto(path + "output.fits", overwrite=True)
     return None
+
+def ensure_packages_installed():
+       """Ensure required packages are installed"""
+
+       required_packages = ["Armazones", "ELT", "METIS"]
+       pkg_path = get_scopesim_inst_pkgs_path()
+
+       if  not all(Path(pkg_path, pkg).is_dir() for pkg in required_packages):
+
+              try:
+                     for pkg in required_packages:
+                            sim.download_packages([pkg])
+              except Exception as e:
+                     raise
+       return None
 
 # Arrays used in star fields template
 # For now taken from Metis_Simulations

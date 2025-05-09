@@ -4,6 +4,7 @@ from pathlib import Path
 from .simulations.sim import Simulate
 from .simulations.utils import save_fits
 from astropy.io import fits
+from .simulations.donut import donut
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
@@ -56,4 +57,20 @@ def create_app(test_config=None):
             print("FITS file not found in /display_fits route!")
             return "FITS file not found", 404
         return send_file(fits_path, mimetype='image/fits')
+    
+    @app.route('/secret', methods=['POST', 'GET'])
+    def secret():
+        return render_template('secret_donut.html')
+    
+    @app.route('/donut_sim', methods=['POST', 'GET'])
+    def donut_sim():
+        if request.method == 'POST':
+            values = {
+            "semi-maj": request.form.get('Semi-major axis'),
+            "semi-min": request.form.get('Semi-minor axis'),
+            "ecc": request.form.get('Eccentricity'),
+            "inc": request.form.get('Inclination'),
+            "width": request.form.get('Width'),
+            "height": request.form.get('Height')}
+        return render_template('secret_donut.html')
     return app
