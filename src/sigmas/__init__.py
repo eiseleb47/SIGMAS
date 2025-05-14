@@ -1,6 +1,5 @@
 import os
 import tempfile
-from pathlib import Path
 from .simulations.sim import Simulate
 from .simulations.utils import save_fits
 from astropy.io import fits
@@ -30,17 +29,6 @@ def create_app(test_config=None):
 
             try:
                 hdu = Simulate(variables["mode"], variables["exposure_time"], variables["source"])
-
-                temp_dir = tempfile.gettempdir()
-                fits_file_path = os.path.join(temp_dir, "simulation_result.fits")
-                hdu.writeto(fits_file_path, overwrite=True)
-
-                if os.path.exists(fits_file_path):
-                    print(f"FITS file created at: {fits_file_path}")
-                else:
-                    print("FITS file was not created!")
-
-                flash('Simulation completed successfully!')
 
                 return render_template('index.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
 

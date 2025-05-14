@@ -1,0 +1,14 @@
+simulation:
+  do.catg: eso_word
+  mode: "mode"
+  source:
+    name: "source"
+    kwargs: {}
+  properties:
+  dit: exp
+  ndit: 4
+  filter_name: fitting
+  catg: "fitting"
+  tech: "values"
+  type: "the thing"
+  nObs: 1

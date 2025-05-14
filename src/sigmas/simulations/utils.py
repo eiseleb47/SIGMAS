@@ -4,6 +4,7 @@ import numpy as np
 import logging
 import scopesim as sim
 import os
+import yaml
 
 def get_scopesim_inst_pkgs_path():
     """Find the inst_pkgs directory relative to scopesim installation"""
@@ -36,6 +37,27 @@ def ensure_packages_installed():
               except Exception as e:
                      raise
        return None
+
+def update_yaml(file, changes):
+    with open(file, 'r') as f:
+        data = yaml.safe_load(f)
+    for key, change in changes.items():
+        if key in data:
+            for subkey, subchanges in change.items():
+                if subkey in data[key]:
+                    # If the value is a dict, update; else, assign
+                    if isinstance(data[key][subkey], dict) and isinstance(subchanges, dict):
+                        data[key][subkey].update(subchanges)
+                    else:
+                        data[key][subkey] = subchanges
+                else:
+                    print(f"Key not found: {key}")
+        else:
+            print(f"Key not found: {key}")
+
+    with open(file, 'w') as f:
+        yaml.dump(data, f, sort_keys=False)
+    return
 
 # Arrays used in star fields template
 # For now taken from Metis_Simulations
