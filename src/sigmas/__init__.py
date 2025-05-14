@@ -9,6 +9,10 @@ from .simulations.donut import donut
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
 def create_app(test_config=None):
+    '''
+    :return: Returns an app object.
+    :rtype: flask.Flask
+    '''
     app = Flask(__name__, instance_relative_config=True)
     app.secret_key = '9936c5876875aca8448c987732b762753fa8ce09dc5df172128ab28d92178544'
 

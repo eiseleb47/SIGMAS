@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "GPL-3.0-or-later"
 authors = [
-    {name = "Benjamin Eisele", email = "your.email@example.com"}
+    {name = "Benjamin Eisele", email = "benjamin.eisele0101@gmail.com"}
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -23,6 +23,7 @@ dependencies = [
     "astropy",
     "numpy",
     "click",
+    "sphinx",
 ]
 
 [project.scripts]

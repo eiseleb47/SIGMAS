@@ -13,6 +13,8 @@ Idea.png
 *.Identifier
 *.vscode
 *.egg-info
+*.pytest_cache
+docs/build/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 TODO

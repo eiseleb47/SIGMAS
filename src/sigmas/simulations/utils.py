@@ -6,7 +6,11 @@ import scopesim as sim
 import os
 
 def get_scopesim_inst_pkgs_path():
-    """Find the inst_pkgs directory relative to scopesim installation"""
+    """Find the inst_pkgs directory relative to the current files installation. If it doesn't exist it gets created.
+
+    :return: Returns the path of the `inst_pkgs` directory.
+    :rtype: str
+    """
     package_dir = Path(__file__).parent / "inst_pkgs"
     package_dir.mkdir(exist_ok=True, parents=True)
     
@@ -18,12 +22,22 @@ def get_scopesim_inst_pkgs_path():
     return str(package_dir)
 
 def save_fits(file, path=""):
-    '''Save a fits file to disk'''
+    '''Save a fits file to disk.
+
+    :param file: Path of the fits file to write to disk.
+    :type file: str
+    :param path: Path to the location where the file should be saved.
+    :type path: str
+    :rtype: None
+    '''
     file.writeto(path + "output.fits", overwrite=True)
     return None
 
 def ensure_packages_installed():
-       """Ensure required packages are installed"""
+       """Ensure required packages are installed.
+
+       :rtype: None
+       """
 
        required_packages = ["Armazones", "ELT", "METIS"]
        pkg_path = get_scopesim_inst_pkgs_path()
