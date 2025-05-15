@@ -1,14 +1,14 @@
 simulation:
-  do.catg: eso_word
-  mode: "mode"
+  do.catg: N_LSS_STD_RAW
+  mode: lss_n
   source:
-    name: "source"
+    name: simple_star8
     kwargs: {}
   properties:
-  dit: exp
-  ndit: 4
-  filter_name: fitting
-  catg: "fitting"
-  tech: "values"
-  type: "the thing"
-  nObs: 1
+    dit: 100
+    ndit: 4
+    filter_name: N_spec
+    catg: CALIB
+    tech: LSS,N
+    type: STD
+    nObs: 1

@@ -39,21 +39,19 @@ def ensure_packages_installed():
        return None
 
 def update_yaml(file, changes):
+    def set_nested(data, key_path, value):
+        for key in key_path[:-1]:
+            if key not in data or not isinstance(data[key], dict):
+                data[key] = {}
+            data = data[key]
+        data[key_path[-1]] = value
+
     with open(file, 'r') as f:
         data = yaml.safe_load(f)
-    for key, change in changes.items():
-        if key in data:
-            for subkey, subchanges in change.items():
-                if subkey in data[key]:
-                    # If the value is a dict, update; else, assign
-                    if isinstance(data[key][subkey], dict) and isinstance(subchanges, dict):
-                        data[key][subkey].update(subchanges)
-                    else:
-                        data[key][subkey] = subchanges
-                else:
-                    print(f"Key not found: {key}")
-        else:
-            print(f"Key not found: {key}")
+
+    for dotted_key, value in changes.items():
+        key_path = dotted_key.split(':')
+        set_nested(data, key_path, value)
 
     with open(file, 'w') as f:
         yaml.dump(data, f, sort_keys=False)
