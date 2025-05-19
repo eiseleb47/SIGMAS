@@ -55,7 +55,7 @@ def ensure_packages_installed():
             print(f"Failed to install {pkg}: {str(e)}")
             raise RuntimeError(f"Package installation failed: {str(e)}")
     
-    return None
+    return True
 
 def update_yaml(file, changes):
     def set_nested(data, key_path, value):
@@ -78,12 +78,20 @@ def update_yaml(file, changes):
 
 def yaml_lss_updates(mode, source, exp):
         return{
+        # LSS mode updates
         ("lss_l", "simple_gal"): {"do.catg": "LM_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "OBJECT"},
         ("lss_l", "empty_sky"): {"do.catg": "LM_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "SKY"},
         ("lss_l", "simple_star8"): {"do.catg": "LM_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "CALIB", "properties:tech": "LSS,LM", "properties:type": "STD"},
         ("lss_n", "simple_gal"): {"do.catg": "N_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "OBJECT"},
         ("lss_n", "empty_sky"): {"do.catg": "N_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "SKY"},
         ("lss_n", "simple_star8"): {"do.catg": "N_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "CALIB", "properties:tech": "LSS,N", "properties:type": "STD"},
+        # IMG mode updates
+        ("img_lm", "simple_star12"): {"do.catg": "LM_IMAGE_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "CALIB", "properties:tech": "IMAGE,LM", "properties:type": "STD"},
+        ("img_lm", "empty_sky"): {"do.catg": "LM_IMAGE_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "CALIB", "properties:tech": "IMAGE,LM", "properties:type": "SKY"},
+        ("img_lm", "star_field"): {"do.catg": "LM_IMAGE_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "SCIENCE", "properties:tech": "IMAGE,LM", "properties:type": "OBJECT"},
+        ("img_n", "simple_star12"): {"do.catg": "N_IMAGE_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "STD"},
+        ("img_n", "empty_sky"): {"do.catg": "N_IMAGE_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "SKY"},
+        ("img_n", "star_field"): {"do.catg": "N_IMAGE_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "SCIENCE", "properties:tech": "IMAGE,N", "properties:type": "OBJECT"},
         }
 
 # Arrays used in star fields template

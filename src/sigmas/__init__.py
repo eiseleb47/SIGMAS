@@ -3,6 +3,7 @@ import tempfile
 from .simulations.run_sim import Simulate
 from .simulations.donut import donut
 import pathlib
+import re
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
@@ -12,30 +13,47 @@ def create_app(test_config=None):
 
     @app.route('/', methods=['GET', 'POST'])
     def home():
-        return render_template('index.html')
+        return render_template('welcome.html')
+    
+    @app.route('/lss', methods=['GET', 'POST'])
+    def lss():
+        return render_template('lss.html')
+    
+    @app.route('/img', methods=['GET', 'POST'])
+    def img():
+        return render_template('img.html')
 
     @app.route('/simulation', methods=['POST'])
     def sim():
         if request.method == 'POST':
-            exposure_time = request.form.get('exposure_time')
-            if not exposure_time:
-                flash('Please enter an exposure time')
-                return render_template('index.html')
+            lss_pattern = re.compile("lss_[lnm]")
+            img_pattern = re.compile("img_[lnm]")
+            
             variables = {
             "mode": request.form.get('mode'),
             "source": request.form.get('source'),
-            "exposure_time": exposure_time}
+            "exposure_time": request.form.get('exposure_time')}
+
+            if not variables['exposure_time']:
+                flash('Please enter an exposure time!')
+                if lss_pattern.match(variables['mode']):
+                    return render_template('lss.html')
+                elif img_pattern.match(variables['mode']):
+                    return render_template('img.html')
 
             try:
                 Simulate(variables=variables)
 
-                return render_template('index.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
+                if lss_pattern.match(variables['mode']):
+                    return render_template('lss.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
+                if img_pattern.match(variables['mode']):
+                    return render_template('img.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
 
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')
                 return redirect(url_for('home'))
 
-        return render_template('index.html')
+        return render_template('welcome.html')
     @app.route('/display_fits', methods=['POST', 'GET'])
     def display_fits():
         temp_dir = tempfile.gettempdir()
@@ -51,7 +69,7 @@ def create_app(test_config=None):
     
     @app.route('/secret', methods=['POST', 'GET'])
     def secret():
-        return render_template('secret_donut.html')
+        return render_template('donut.html')
     
     @app.route('/donut_sim', methods=['POST', 'GET'])
     def donut_sim():

@@ -1,14 +1,14 @@
 simulation:
-  do.catg: LM_LSS_STD_RAW
-  mode: lss_l
   source:
-    name: simple_star8
     kwargs: {}
+    name: empty_sky
   properties:
-    dit: 2.0
     ndit: 4
-    filter_name: L_spec
-    catg: CALIB
-    tech: LSS,LM
-    type: STD
     nObs: 1
+    dit: 0.5
+    filter_name: Lp
+    catg: CALIB
+    tech: IMAGE,LM
+    type: SKY
+  do.catg: LM_IMAGE_SKY_RAW
+  mode: img_lm
