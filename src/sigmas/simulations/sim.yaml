@@ -1,14 +1,14 @@
 simulation:
-  do.catg: N_LSS_STD_RAW
-  mode: lss_n
+  do.catg: LM_LSS_STD_RAW
+  mode: lss_l
   source:
     name: simple_star8
     kwargs: {}
   properties:
-    dit: 100
+    dit: 2.0
     ndit: 4
-    filter_name: N_spec
+    filter_name: L_spec
     catg: CALIB
-    tech: LSS,N
+    tech: LSS,LM
     type: STD
     nObs: 1

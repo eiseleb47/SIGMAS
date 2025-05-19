@@ -5,18 +5,28 @@ import logging
 import scopesim as sim
 import os
 import yaml
-
 def get_scopesim_inst_pkgs_path():
-    """Find the inst_pkgs directory relative to scopesim installation"""
-    package_dir = Path(__file__).parent / "inst_pkgs"
-    package_dir.mkdir(exist_ok=True, parents=True)
+    """Get the path to the instrument packages directory."""
+    # First check if SCOPESIM_INST_PKGS environment variable is set
+    pkg_path = os.getenv("SCOPESIM_INST_PKGS")
+    if pkg_path and os.path.exists(pkg_path):
+        return os.path.abspath(pkg_path)
     
-    if not package_dir.exists():
-        raise RuntimeError(f"Failed to create directory: {package_dir}")
-    if not os.access(package_dir, os.W_OK):
-        raise RuntimeError(f"Directory not writable: {package_dir}")
+    # Try to find inst_pkgs in current working directory
+    cwd = os.getcwd()
+    local_inst_pkgs = os.path.join(cwd, "inst_pkgs")
+    if os.path.exists(local_inst_pkgs):
+        return os.path.abspath(local_inst_pkgs)
         
-    return str(package_dir)
+    # Try user's home directory first (preferred location)
+    home = os.path.expanduser("~")
+    home_inst_pkgs = os.path.join(home, ".scopesim/inst_pkgs")
+    if os.path.exists(home_inst_pkgs):
+        return os.path.abspath(home_inst_pkgs)
+        
+    # Create default location if nothing exists
+    os.makedirs(home_inst_pkgs, exist_ok=True)
+    return os.path.abspath(home_inst_pkgs)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk'''
@@ -24,19 +34,28 @@ def save_fits(file, path=""):
     return None
 
 def ensure_packages_installed():
-       """Ensure required packages are installed"""
-
-       required_packages = ["Armazones", "ELT", "METIS"]
-       pkg_path = get_scopesim_inst_pkgs_path()
-
-       if  not all(Path(pkg_path, pkg).is_dir() for pkg in required_packages):
-
-              try:
-                     for pkg in required_packages:
-                            sim.download_packages([pkg])
-              except Exception as e:
-                     raise
-       return None
+    """Ensure required packages are installed"""
+    required_packages = {
+        "Armazones": "2023-07-11",
+        "ELT": "2024-02-29", 
+        "METIS": "2024-05-14"
+    }
+    pkg_path = get_scopesim_inst_pkgs_path()
+    
+    print(f"Installing packages to: {pkg_path}")
+    
+    for pkg, version in required_packages.items():
+        try:
+            if not os.path.exists(os.path.join(pkg_path, pkg)):
+                print(f"Installing {pkg} version {version}")
+                sim.download_packages(pkg, release=version)
+            else:
+                print(f"Found existing {pkg} installation")
+        except Exception as e:
+            print(f"Failed to install {pkg}: {str(e)}")
+            raise RuntimeError(f"Package installation failed: {str(e)}")
+    
+    return None
 
 def update_yaml(file, changes):
     def set_nested(data, key_path, value):
@@ -56,6 +75,16 @@ def update_yaml(file, changes):
     with open(file, 'w') as f:
         yaml.dump(data, f, sort_keys=False)
     return
+
+def yaml_lss_updates(mode, source, exp):
+        return{
+        ("lss_l", "simple_gal"): {"do.catg": "LM_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "OBJECT"},
+        ("lss_l", "empty_sky"): {"do.catg": "LM_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "SKY"},
+        ("lss_l", "simple_star8"): {"do.catg": "LM_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "CALIB", "properties:tech": "LSS,LM", "properties:type": "STD"},
+        ("lss_n", "simple_gal"): {"do.catg": "N_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "OBJECT"},
+        ("lss_n", "empty_sky"): {"do.catg": "N_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "SKY"},
+        ("lss_n", "simple_star8"): {"do.catg": "N_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "CALIB", "properties:tech": "LSS,N", "properties:type": "STD"},
+        }
 
 # Arrays used in star fields template
 # For now taken from Metis_Simulations

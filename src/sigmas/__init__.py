@@ -1,9 +1,8 @@
 import os
 import tempfile
-from .simulations.sim import Simulate
-from .simulations.utils import save_fits
-from astropy.io import fits
+from .simulations.run_sim import Simulate
 from .simulations.donut import donut
+import pathlib
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
@@ -28,7 +27,7 @@ def create_app(test_config=None):
             "exposure_time": exposure_time}
 
             try:
-                hdu = Simulate(variables["mode"], variables["exposure_time"], variables["source"])
+                Simulate(variables=variables)
 
                 return render_template('index.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
 
@@ -40,11 +39,15 @@ def create_app(test_config=None):
     @app.route('/display_fits', methods=['POST', 'GET'])
     def display_fits():
         temp_dir = tempfile.gettempdir()
-        fits_path = os.path.join(temp_dir, "simulation_result.fits")
-        if not os.path.exists(fits_path):
+        fits_path = os.path.join(temp_dir, "simulation_result")
+        fits_dir = pathlib.Path(fits_path)
+        latest = max(fits_dir.glob("*.fits"), key=lambda p: p.stat().st_mtime)
+        filename = str(latest)
+        file_path = os.path.join(fits_dir, filename)
+        if not os.path.exists(filename):
             print("FITS file not found in /display_fits route!")
             return "FITS file not found", 404
-        return send_file(fits_path, mimetype='image/fits')
+        return send_file(file_path, mimetype='image/fits')
     
     @app.route('/secret', methods=['POST', 'GET'])
     def secret():

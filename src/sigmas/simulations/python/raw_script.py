@@ -9,7 +9,7 @@ import datetime
 from pathlib import Path
 from itertools import product, cycle, chain
 from collections.abc import Mapping
-
+from sigmas.simulations.utils import get_scopesim_inst_pkgs_path
 
 import numpy as np
 from more_itertools import value_chain
@@ -73,6 +73,7 @@ def simulate(fname, mode, kwargs, source=None, small=False):
     # is reproducible, so we can create the exact same dataset again at a
     # later date.
     kwargs["!SIM.random.seed"] = 9001
+    #sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()
 
     #mode = MODESDICT[kwargs["!OBS.tech"]]
     logger.info("ScopeSim mode: %s", mode)
@@ -299,8 +300,7 @@ def main():
 
     argdict = vars(parser.parse_args())
     _logger_setup(argdict.pop("verbose"))
-    # sim.rc.__config__["!SIM.file.local_packages_path"] = argdict.pop("irdb")
-
+    #sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()
     expanders = argdict.pop("expand") or []
     fnames = argdict.pop("outpath")
     source = argdict.pop("source")
