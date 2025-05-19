@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}"/>
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+        <title>SIGMAS</title>
+    </head>
+    <body>
+        <h1>SIGMAS - Simulation Interface for Generating METIS Astronomical Spectra</h1>
+        <br>
+        <div class="button-container">
+            <a href="{{ url_for('lss') }}" class="welcome-button">LSS Simulations</a>
+            <a href="{{ url_for('img') }}" class="welcome-button">Imaging Simulations</a>
+            <a href="{{ url_for('secret') }}" class="welcome-button">Special Donut Simulations</a>
+        </div>
+    </body>
+</html>
