@@ -11,13 +11,14 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     """
     Simulate the observation of a source with the specified mode and exposure time.
     
-    Parameters:
-    - mode: The mode of observation (e.g., "lss_l").
-    - exp: The exposure time in seconds.
-    - source_flux: The flux of the source.
-    
-    Returns:
-    - hdu: The observed data.
+    :param mode: Selects the simulated mode. Currently supports `lss_l`, `lss_m`, `lss_n`.
+    :type mode: str
+    :param exp: Input value for the total Exposure Time.
+    :type exp: float
+    :param object: Selects the object to simulate in the optical train. Currently supports `Star Field` and `Elliptical Galaxy`.
+    :type object: str
+    :return: hdu fits object.
+    :rtype: fits.HUDList
     """
     
     # Set up the simulation

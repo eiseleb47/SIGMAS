@@ -25,7 +25,14 @@ def get_scopesim_inst_pkgs_path():
     return os.path.abspath(filepath)
 
 def save_fits(file, path=""):
-    '''Save a fits file to disk'''
+    '''Save a fits file to disk.
+
+    :param file: Path of the fits file to write to disk.
+    :type file: str
+    :param path: Path to the location where the file should be saved.
+    :type path: str
+    :rtype: None
+    '''
     file.writeto(path + "output.fits", overwrite=True)
     return None
 
