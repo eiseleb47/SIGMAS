@@ -15,29 +15,42 @@
         <title>SIGMAS</title>
     </head>
     <body>
+        <a href="{{ url_for('home') }}" class="home-button">←</a>
         <h1>SIGMAS - Simulation Interface for Generating METIS Astronomical Spectra</h1>
-        <br>
-        <form action="/donut_sim" method="post" enctype="multipart/form-data">
+        <form action="/simulation" method="post" enctype="multipart/form-data">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <ul class=flashes>
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
           <div class="choose">
             <h2>Please choose your Simulation Parameters:</h2>
           </div> 
-          <br>
           <div class="form-top">
-            <div class="form-left"> 
-              <label for="val1">Semi-major axis:</label>
-              <input type="number" id="val1" name="Semi-major axis">
-              <label for="val2">Semi-minor axis:</label>
-              <input type="number" id="val2" name="Semi-minor axis">
-              <label for="val3">Eccentricity:</label>
-              <input type="number" id="val3" name="Eccentricity">
+            <div class="form-left">
+              <label for="val1">Exposure Time:</label>
+              <input type="number" id="val1" name="exposure_time" step="any" min=0>
             </div>
             <div class="form-right">
-                <label for="val4">Inclination:</label>
-                <input type="number" id="val4" name="Inclination">
-                <label for="val5">Width:</label>
-                <input type="number" id="val5" name="Width">
-                <label for="val6">Height:</label>
-              <input type="number" id="val6" name="Height">
+              <label for="source" class="dropdown_label">Choose your source:</label>
+              <br>
+              <select name="source" id="source" class="dropdown">
+                <option value="simple_star12">Standard Star</option>
+                <option value="star_field">Star Field</option>
+                <option value="empty_sky">Empty Sky</option>
+              </select>
+              <br>
+              <br>
+              <label for="mode" class="dropdown_label">Choose observing mode:</label>
+              <br>
+              <select name="mode" id="mode" class="dropdown">
+                <option value="img_lm">IMG LM mode</option>
+                <option value="img_n">IMG N mode</option>
+              </select>
             </div>
           </div>
           <div class="submit-row">

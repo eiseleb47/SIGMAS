@@ -38,7 +38,7 @@ h1 {
     text-align: center;
     font-size: x-large;
     color: var(--lavender);
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
 }
 
 .form-top {
@@ -134,4 +134,86 @@ label {
 .JS9 {
     background-color: var(--surface0) !important;
     border-radius: 0 0 8px 8px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.welcome-button {
+    background-color: var(--blue);
+    color: var(--base);
+    border: none;
+    border-radius: 8px;
+    padding: 1.2rem 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.welcome-button:hover {
+    background-color: var(--lavender);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.welcome-button {
+    background-color: var(--blue);
+    color: var(--base);
+    border: none;
+    border-radius: 8px;
+    padding: 1.2rem 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.welcome-button:hover {
+    background-color: var(--lavender);
+}
+
+.home-button {
+    position: fixed;
+    top: 2.5rem;  /* Slightly adjusted to align with title */
+    left: 2rem;
+    background-color: var(--surface0);
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    padding: 0.4rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+}
+
+.home-button:hover {
+    background-color: var(--lavender);
+    color: var(--base);
+}
+
+.flashes {
+    margin: 0;
+    padding: 0;
+    margin-left: 9%;
+    color: var(--text);
+}
+
+.flashes li {
+    margin-bottom: 1rem;
 }

@@ -18,6 +18,7 @@ docs/build/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 TODO
+/docs/build/
 inst_pkgs/
 **/inst_pkgs/
 src/sigmas/simulations/inst_pkgs/

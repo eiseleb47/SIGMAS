@@ -1,25 +1,28 @@
-from pathlib import Path
 from astropy.io import fits
 import numpy as np
-import logging
 import scopesim as sim
 import os
-
+import yaml
 def get_scopesim_inst_pkgs_path():
-    """Find the inst_pkgs directory relative to the current files installation. If it doesn't exist it gets created.
-
-    :return: Returns the path of the `inst_pkgs` directory.
-    :rtype: str
-    """
-    package_dir = Path(__file__).parent / "inst_pkgs"
-    package_dir.mkdir(exist_ok=True, parents=True)
+    """Get the path to the instrument packages directory."""
+    pkg_path = os.getenv("SCOPESIM_INST_PKGS")
+    if pkg_path and os.path.exists(pkg_path):
+        return os.path.abspath(pkg_path)
     
-    if not package_dir.exists():
-        raise RuntimeError(f"Failed to create directory: {package_dir}")
-    if not os.access(package_dir, os.W_OK):
-        raise RuntimeError(f"Directory not writable: {package_dir}")
+    file = os.path.abspath(__file__)
+    parent = os.path.dirname(file)
+    filepath = os.path.join(parent, "inst_pkgs")
+    if os.path.exists(filepath):
+        return os.path.abspath(parent)
         
-    return str(package_dir)
+    home = os.path.expanduser("~")
+    home_inst_pkgs = os.path.join(home, ".scopesim/inst_pkgs")
+    if os.path.exists(home_inst_pkgs):
+        return os.path.abspath(home_inst_pkgs)
+        
+    # Create default location if nothing exists
+    os.makedirs(filepath, exist_ok=True)
+    return os.path.abspath(filepath)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk.
@@ -34,22 +37,65 @@ def save_fits(file, path=""):
     return None
 
 def ensure_packages_installed():
-       """Ensure required packages are installed.
+    """Ensure required packages are installed"""
+    required_packages = [
+        "Armazones",
+        "ELT", 
+        "METIS"
+    ]
+    pkg_path = get_scopesim_inst_pkgs_path()
+    
+    print(f"Installing packages to: {pkg_path}")
+    
+    for pkg in required_packages:
+        try:
+            if not os.path.exists(os.path.join(pkg_path, pkg)):
+                print(f"Installing {pkg}")
+                sim.download_packages(pkg)
+            else:
+                print(f"Found existing {pkg} installation")
+        except Exception as e:
+            print(f"Failed to install {pkg}: {str(e)}")
+            raise RuntimeError(f"Package installation failed: {str(e)}")
+    
+    return True
 
-       :rtype: None
-       """
+def update_yaml(file, changes):
+    def set_nested(data, key_path, value):
+        for key in key_path[:-1]:
+            if key not in data or not isinstance(data[key], dict):
+                data[key] = {}
+            data = data[key]
+        data[key_path[-1]] = value
 
-       required_packages = ["Armazones", "ELT", "METIS"]
-       pkg_path = get_scopesim_inst_pkgs_path()
+    with open(file, 'r') as f:
+        data = yaml.safe_load(f)
 
-       if  not all(Path(pkg_path, pkg).is_dir() for pkg in required_packages):
+    for dotted_key, value in changes.items():
+        key_path = dotted_key.split(':')
+        set_nested(data, key_path, value)
 
-              try:
-                     for pkg in required_packages:
-                            sim.download_packages([pkg])
-              except Exception as e:
-                     raise
-       return None
+    with open(file, 'w') as f:
+        yaml.dump(data, f, sort_keys=False)
+    return
+
+def yaml_lss_updates(mode, source, exp):
+        return{
+        # LSS mode updates
+        ("lss_l", "simple_gal"): {"do.catg": "LM_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "OBJECT"},
+        ("lss_l", "empty_sky"): {"do.catg": "LM_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "SKY"},
+        ("lss_l", "simple_star8"): {"do.catg": "LM_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "CALIB", "properties:tech": "LSS,LM", "properties:type": "STD"},
+        ("lss_n", "simple_gal"): {"do.catg": "N_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "OBJECT"},
+        ("lss_n", "empty_sky"): {"do.catg": "N_LSS_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,N", "properties:type": "SKY"},
+        ("lss_n", "simple_star8"): {"do.catg": "N_LSS_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N_spec", "properties:catg": "CALIB", "properties:tech": "LSS,N", "properties:type": "STD"},
+        # IMG mode updates
+        ("img_lm", "simple_star12"): {"do.catg": "LM_IMAGE_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "CALIB", "properties:tech": "IMAGE,LM", "properties:type": "STD"},
+        ("img_lm", "empty_sky"): {"do.catg": "LM_IMAGE_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "CALIB", "properties:tech": "IMAGE,LM", "properties:type": "SKY"},
+        ("img_lm", "star_field"): {"do.catg": "LM_IMAGE_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "Lp", "properties:catg": "SCIENCE", "properties:tech": "IMAGE,LM", "properties:type": "OBJECT"},
+        ("img_n", "simple_star12"): {"do.catg": "N_IMAGE_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "STD"},
+        ("img_n", "empty_sky"): {"do.catg": "N_IMAGE_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "SKY"},
+        ("img_n", "star_field"): {"do.catg": "N_IMAGE_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "SCIENCE", "properties:tech": "IMAGE,N", "properties:type": "OBJECT"},
+        }
 
 # Arrays used in star fields template
 # For now taken from Metis_Simulations

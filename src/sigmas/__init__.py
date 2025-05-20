@@ -1,10 +1,8 @@
 import os
 import tempfile
-from pathlib import Path
-from .simulations.sim import Simulate
-from .simulations.utils import save_fits
-from astropy.io import fits
-from .simulations.donut import donut
+from .simulations.run_sim import Simulate
+import pathlib
+import re
 
 from flask import Flask, render_template, request, flash, send_file, redirect, url_for
 
@@ -18,53 +16,63 @@ def create_app(test_config=None):
 
     @app.route('/', methods=['GET', 'POST'])
     def home():
-        return render_template('index.html')
+        return render_template('welcome.html')
+    
+    @app.route('/lss', methods=['GET', 'POST'])
+    def lss():
+        return render_template('lss.html')
+    
+    @app.route('/img', methods=['GET', 'POST'])
+    def img():
+        return render_template('img.html')
 
     @app.route('/simulation', methods=['POST'])
     def sim():
         if request.method == 'POST':
-            exposure_time = request.form.get('exposure_time')
-            if not exposure_time:
-                flash('Please enter an exposure time')
-                return render_template('index.html')
+            lss_pattern = re.compile("lss_[lnm]")
+            img_pattern = re.compile("img_[lnm]")
+            
             variables = {
             "mode": request.form.get('mode'),
             "source": request.form.get('source'),
-            "exposure_time": exposure_time}
+            "exposure_time": request.form.get('exposure_time')}
+
+            if not variables['exposure_time']:
+                flash('Please enter an exposure time!')
+                if lss_pattern.match(variables['mode']):
+                    return render_template('lss.html')
+                elif img_pattern.match(variables['mode']):
+                    return render_template('img.html')
 
             try:
-                hdu = Simulate(variables["mode"], variables["exposure_time"], variables["source"])
+                Simulate(variables=variables)
 
-                temp_dir = tempfile.gettempdir()
-                fits_file_path = os.path.join(temp_dir, "simulation_result.fits")
-                hdu.writeto(fits_file_path, overwrite=True)
-
-                if os.path.exists(fits_file_path):
-                    print(f"FITS file created at: {fits_file_path}")
-                else:
-                    print("FITS file was not created!")
-
-                flash('Simulation completed successfully!')
-
-                return render_template('index.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
+                if lss_pattern.match(variables['mode']):
+                    return render_template('lss.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
+                if img_pattern.match(variables['mode']):
+                    return render_template('img.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
 
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')
                 return redirect(url_for('home'))
 
-        return render_template('index.html')
+        return render_template('welcome.html')
     @app.route('/display_fits', methods=['POST', 'GET'])
     def display_fits():
         temp_dir = tempfile.gettempdir()
-        fits_path = os.path.join(temp_dir, "simulation_result.fits")
-        if not os.path.exists(fits_path):
+        fits_path = os.path.join(temp_dir, "simulation_result")
+        fits_dir = pathlib.Path(fits_path)
+        latest = max(fits_dir.glob("*.fits"), key=lambda p: p.stat().st_mtime)
+        filename = str(latest)
+        file_path = os.path.join(fits_dir, filename)
+        if not os.path.exists(filename):
             print("FITS file not found in /display_fits route!")
             return "FITS file not found", 404
-        return send_file(fits_path, mimetype='image/fits')
+        return send_file(file_path, mimetype='image/fits')
     
     @app.route('/secret', methods=['POST', 'GET'])
     def secret():
-        return render_template('secret_donut.html')
+        return render_template('donut.html')
     
     @app.route('/donut_sim', methods=['POST', 'GET'])
     def donut_sim():
