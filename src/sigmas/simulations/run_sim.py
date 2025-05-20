@@ -8,7 +8,13 @@ import scopesim as sim
 from pathlib import Path
 
 def Simulate(variables: dict):
+    """
+    Simulate images for differnt combinations of source, mode and exposure time.
 
+    :param variables: A dictionary containing values for the mode, source and exposure time.
+    :type variables: dict
+    :rtype: None
+    """
     ensure_packages_installed()
     
     sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()

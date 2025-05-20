@@ -23,6 +23,7 @@ inst_pkgs/
 **/inst_pkgs/
 src/sigmas/simulations/inst_pkgs/
 /src/sigmas/simulations/inst_pkgs/
+*.yaml
 
 # Mono auto generated files
 mono_crash.*

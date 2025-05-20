@@ -184,13 +184,13 @@ label {
 
 .home-button {
     position: fixed;
-    top: 2.5rem;  /* Slightly adjusted to align with title */
+    top: 2.8rem;  /* Slightly adjusted to align with title */
     left: 2rem;
     background-color: var(--surface0);
     color: var(--text);
     border: none;
     border-radius: 8px;
-    padding: 0.4rem;
+    padding: 0.2rem;
     cursor: pointer;
     text-decoration: none;
     transition: background-color 0.2s, color 0.2s;

@@ -3,14 +3,15 @@ import numpy as np
 import scopesim as sim
 import os
 import yaml
+from pathlib import Path
 def get_scopesim_inst_pkgs_path():
     """Get the path to the instrument packages directory."""
     pkg_path = os.getenv("SCOPESIM_INST_PKGS")
     if pkg_path and os.path.exists(pkg_path):
         return os.path.abspath(pkg_path)
     
-    file = os.path.abspath(__file__)
-    parent = os.path.dirname(file)
+    file = Path(__file__)
+    parent = file.parent
     filepath = os.path.join(parent, "inst_pkgs")
     if os.path.exists(filepath):
         return os.path.abspath(parent)

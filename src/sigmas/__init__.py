@@ -1,6 +1,7 @@
 import os
 import tempfile
 from .simulations.run_sim import Simulate
+from .simulations.donut_sim import create_one_nut
 import pathlib
 import re
 
@@ -26,7 +27,7 @@ def create_app(test_config=None):
     def img():
         return render_template('img.html')
 
-    @app.route('/simulation', methods=['POST'])
+    @app.route('/regular_simulation', methods=['POST'])
     def sim():
         if request.method == 'POST':
             lss_pattern = re.compile("lss_[lnm]")
@@ -82,7 +83,15 @@ def create_app(test_config=None):
             "semi-min": request.form.get('Semi-minor axis'),
             "ecc": request.form.get('Eccentricity'),
             "inc": request.form.get('Inclination'),
+            "ring_ratio": request.form.get('Ring Ratio'),
             "width": request.form.get('Width'),
             "height": request.form.get('Height')}
-        return render_template('secret_donut.html')
+
+            try:
+                create_one_nut(values)
+                return render_template("donut.html", fits_url=url_for('display_fits'))
+            except Exception as e:
+                flash(f'Simulation failed: {str(e)}')
+                return redirect(url_for('donut_sim'))
+        return render_template('donut.html')
     return app

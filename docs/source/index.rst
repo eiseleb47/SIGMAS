@@ -27,5 +27,6 @@ To start the server and open a new tab in your default Browser on the root page 
    :maxdepth: 3
    :caption: Contents:
 
+   sim
    flask
    api
