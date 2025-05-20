@@ -1,7 +1,6 @@
 import os
 import tempfile
 from .simulations.run_sim import Simulate
-from .simulations.donut import donut
 import pathlib
 import re
 

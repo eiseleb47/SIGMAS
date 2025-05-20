@@ -34,7 +34,7 @@ def Simulate(variables: dict):
     if lss_pattern.match(mode) or img_pattern.match(mode):
         key = (mode, source)
         if key in yaml_lss_updates(mode=mode, source=source, exp=exp):
-            yaml_changes = {f"simulation:{k}": v for k, v in yaml_lss_updates(mode=mode, source=source, exp=float(exp))[key].items()}
+            yaml_changes = {f"simulation:{k}": v for k, v in yaml_lss_updates(mode=mode, source=source, exp=float(exp)/4)[key].items()}
             update_yaml(yaml_path, yaml_changes)
         else:
             raise ValueError(f"Unsupported mode/source combination: {key}")

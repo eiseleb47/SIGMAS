@@ -1,32 +1,28 @@
-from pathlib import Path
 from astropy.io import fits
 import numpy as np
-import logging
 import scopesim as sim
 import os
 import yaml
 def get_scopesim_inst_pkgs_path():
     """Get the path to the instrument packages directory."""
-    # First check if SCOPESIM_INST_PKGS environment variable is set
     pkg_path = os.getenv("SCOPESIM_INST_PKGS")
     if pkg_path and os.path.exists(pkg_path):
         return os.path.abspath(pkg_path)
     
-    # Try to find inst_pkgs in current working directory
-    cwd = os.getcwd()
-    local_inst_pkgs = os.path.join(cwd, "inst_pkgs")
-    if os.path.exists(local_inst_pkgs):
-        return os.path.abspath(local_inst_pkgs)
+    file = os.path.abspath(__file__)
+    parent = os.path.dirname(file)
+    filepath = os.path.join(parent, "inst_pkgs")
+    if os.path.exists(filepath):
+        return os.path.abspath(parent)
         
-    # Try user's home directory first (preferred location)
     home = os.path.expanduser("~")
     home_inst_pkgs = os.path.join(home, ".scopesim/inst_pkgs")
     if os.path.exists(home_inst_pkgs):
         return os.path.abspath(home_inst_pkgs)
         
     # Create default location if nothing exists
-    os.makedirs(home_inst_pkgs, exist_ok=True)
-    return os.path.abspath(home_inst_pkgs)
+    os.makedirs(filepath, exist_ok=True)
+    return os.path.abspath(filepath)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk'''
@@ -35,20 +31,20 @@ def save_fits(file, path=""):
 
 def ensure_packages_installed():
     """Ensure required packages are installed"""
-    required_packages = {
-        "Armazones": "2023-07-11",
-        "ELT": "2024-02-29", 
-        "METIS": "2024-05-14"
-    }
+    required_packages = [
+        "Armazones",
+        "ELT", 
+        "METIS"
+    ]
     pkg_path = get_scopesim_inst_pkgs_path()
     
     print(f"Installing packages to: {pkg_path}")
     
-    for pkg, version in required_packages.items():
+    for pkg in required_packages:
         try:
             if not os.path.exists(os.path.join(pkg_path, pkg)):
-                print(f"Installing {pkg} version {version}")
-                sim.download_packages(pkg, release=version)
+                print(f"Installing {pkg}")
+                sim.download_packages(pkg)
             else:
                 print(f"Found existing {pkg} installation")
         except Exception as e:
