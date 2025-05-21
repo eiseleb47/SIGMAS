@@ -24,9 +24,10 @@ To start the server and open a new tab in your default Browser on the root page 
    (.venv) $ sigmas
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
    :caption: Contents:
 
    sim
    flask
+   utils
    api

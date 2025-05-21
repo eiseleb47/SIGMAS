@@ -14,7 +14,7 @@ def get_scopesim_inst_pkgs_path():
     parent = file.parent
     filepath = os.path.join(parent, "inst_pkgs")
     if os.path.exists(filepath):
-        return os.path.abspath(parent)
+        return os.path.abspath(filepath)
         
     home = os.path.expanduser("~")
     home_inst_pkgs = os.path.join(home, ".scopesim/inst_pkgs")
@@ -22,7 +22,7 @@ def get_scopesim_inst_pkgs_path():
         return os.path.abspath(home_inst_pkgs)
         
     # Create default location if nothing exists
-    os.makedirs(filepath, exist_ok=True)
+    os.makedirs(filepath)
     return os.path.abspath(filepath)
 
 def save_fits(file, path=""):

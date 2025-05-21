@@ -10,12 +10,12 @@ Direct Simulations are closest to the underlying ScopeSim code. They have a smal
 
 Yaml file Simulation
 --------------------
-The yaml Simulations make use of the approach first implemented in the `METIS_Simulations Repository <https://github.com/AstarVienna/METIS_Simulations>`. They support a similar amount of parameters to the direct Simulations, however they work with a lot of ScopeSim parameters that are specific to METIS which have been set in the background. Thus these are most likely closer to science grade Simulations.
+The yaml Simulations make use of the approach first implemented in the `METIS_Simulations <https://github.com/AstarVienna/METIS_Simulations>`_ Repository. They support a similar amount of parameters to the direct Simulations, however they work with a lot of ScopeSim parameters that are specific to METIS which have been set in the background. Thus these are most likely closer to science grade Simulations.
 
 .. autofunction:: sigmas.simulations.run_sim.Simulate
 
 Donut Simulation
 ----------------
-The Donut Simulations support a different type of Simulation. They make use of the `AstroDonut Package <https://github.com/Tearyt/AstroDonut>`. These aim to simulate '...synthetic elliptical ring structures...'.
+The Donut Simulations support a different type of Simulation. They make use of the `AstroDonut <https://github.com/Tearyt/AstroDonut>`_ Package. These aim to simulate '...synthetic elliptical ring structures...'.
 
 .. autofunction:: sigmas.simulations.donut_sim.create_one_nut
