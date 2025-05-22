@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=45", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -31,5 +31,16 @@ dependencies = [
 sigmas = "sigmas.cli:main"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
-packages = ["sigmas"]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sigmas", "sigmas.*"]
+
+[tool.setuptools.package-data]
+sigmas = [
+    "static/*",
+    "static/**/*",
+    "templates/*",
+    "templates/**/*"
+]
