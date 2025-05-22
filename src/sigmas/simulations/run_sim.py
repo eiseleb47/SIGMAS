@@ -24,6 +24,7 @@ def Simulate(variables: dict):
     mode, source, exp = variables["mode"], variables["source"], variables["exposure_time"] 
     lss_pattern = re.compile("lss_[lnm]")
     img_pattern = re.compile("img_[lnm]")
+    ifu_pattern = re.compile("lms")
     this_dir = os.path.dirname(os.path.abspath(__file__))
     yaml_path = os.path.join(this_dir, "sim.yaml")
 
@@ -37,7 +38,7 @@ def Simulate(variables: dict):
                             nObs: 1
                     ''')
 
-    if lss_pattern.match(mode) or img_pattern.match(mode):
+    if lss_pattern.match(mode) or img_pattern.match(mode) or ifu_pattern.match(mode):
         key = (mode, source)
         if key in yaml_lss_updates(mode=mode, source=source, exp=exp):
             yaml_changes = {f"simulation:{k}": v for k, v in yaml_lss_updates(mode=mode, source=source, exp=float(exp)/4)[key].items()}

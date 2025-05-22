@@ -24,6 +24,7 @@ dependencies = [
     "numpy",
     "click",
     "sphinx",
+    "astrodonut",
 ]
 
 [project.scripts]

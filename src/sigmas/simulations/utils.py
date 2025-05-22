@@ -11,17 +11,11 @@ def get_scopesim_inst_pkgs_path():
         return os.path.abspath(pkg_path)
     
     file = Path(__file__)
-    parent = file.parent
+    parent = file.parent.parent.parent.parent
     filepath = os.path.join(parent, "inst_pkgs")
     if os.path.exists(filepath):
         return os.path.abspath(filepath)
         
-    home = os.path.expanduser("~")
-    home_inst_pkgs = os.path.join(home, ".scopesim/inst_pkgs")
-    if os.path.exists(home_inst_pkgs):
-        return os.path.abspath(home_inst_pkgs)
-        
-    # Create default location if nothing exists
     os.makedirs(filepath)
     return os.path.abspath(filepath)
 
@@ -46,7 +40,7 @@ def ensure_packages_installed():
     ]
     pkg_path = get_scopesim_inst_pkgs_path()
     
-    print(f"Installing packages to: {pkg_path}")
+    print(f"Package path is: {pkg_path}")
     
     for pkg in required_packages:
         try:
@@ -59,7 +53,7 @@ def ensure_packages_installed():
             print(f"Failed to install {pkg}: {str(e)}")
             raise RuntimeError(f"Package installation failed: {str(e)}")
     
-    return True
+    return None
 
 def update_yaml(file, changes):
     def set_nested(data, key_path, value):
@@ -96,6 +90,10 @@ def yaml_lss_updates(mode, source, exp):
         ("img_n", "simple_star12"): {"do.catg": "N_IMAGE_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "STD"},
         ("img_n", "empty_sky"): {"do.catg": "N_IMAGE_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "CALIB", "properties:tech": "IMAGE,N", "properties:type": "SKY"},
         ("img_n", "star_field"): {"do.catg": "N_IMAGE_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "N1", "properties:catg": "SCIENCE", "properties:tech": "IMAGE,N", "properties:type": "OBJECT"},
+        # IFU mode updates
+        ("lms", "simple_gal"): {"do.catg": "IFU_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "open", "properties:catg": "SCIENCE", "properties:tech": "LMS", "properties:type": "OBJECT" },
+        ("lms", "empty_sky"): {"do.catg": "IFU_SKY_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "open", "properties:catg": "CALIB", "properties:tech": "LMS", "properties:type": "SKY" },
+        ("lms", "calib_star"): {"do.catg": "IFU_STD_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "open", "properties:catg": "SCIENCE", "properties:tech": "LMS", "properties:type": "STD" }
         }
 
 # Arrays used in star fields template

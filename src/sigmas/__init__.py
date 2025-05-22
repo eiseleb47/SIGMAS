@@ -26,12 +26,17 @@ def create_app(test_config=None):
     @app.route('/img', methods=['GET', 'POST'])
     def img():
         return render_template('img.html')
+    
+    @app.route('/ifu', methods=['GET', 'POST'])
+    def ifu():
+        return render_template('ifu.html')
 
     @app.route('/regular_simulation', methods=['POST'])
     def sim():
         if request.method == 'POST':
             lss_pattern = re.compile("lss_[lnm]")
             img_pattern = re.compile("img_[lnm]")
+            ifu_pattern = re.compile("lms")
             
             variables = {
             "mode": request.form.get('mode'),
@@ -44,14 +49,18 @@ def create_app(test_config=None):
                     return render_template('lss.html')
                 elif img_pattern.match(variables['mode']):
                     return render_template('img.html')
+                elif ifu_pattern.match(variables['mode']):
+                    return render_template('ifu.html')
 
             try:
                 Simulate(variables=variables)
 
                 if lss_pattern.match(variables['mode']):
                     return render_template('lss.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
-                if img_pattern.match(variables['mode']):
+                elif img_pattern.match(variables['mode']):
                     return render_template('img.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
+                elif ifu_pattern.match(variables['mode']):
+                    return render_template('ifu.html',  fits_url=url_for('display_fits'), src=variables["source"])
 
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')
