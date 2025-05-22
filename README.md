@@ -23,10 +23,10 @@ SIGMAS makes use of ScopeSim and it's dependencies as well as ScopeSim_Templates
 - As an amateur astronomer using an older laptop, I want to limit the resolution and complexity of the simulations so that I can still use the tool without my system becoming unresponsive.
 - As a user trying to load a previously saved simulation setup, I want the GUI to notify me if the input file is incomplete or contains errors, so that I can correct the issue without the program crashing or producing invalid results.
 ## Examples
-The user is expected to start the GUI by either starting the script from a file manager or by entering the following command in the terminal:
+After installing the package the GUI can be simply started from the terminal:
 ```bash
-# Assuming you are in the sigmas root directory
-pip install -e .
+# Install sigmas from Pypi
+pip install sigmas
 # Run the webserver and open a new browser tab
 sigmas
 ```
