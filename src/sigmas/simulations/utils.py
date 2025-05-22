@@ -6,18 +6,23 @@ import yaml
 from pathlib import Path
 def get_scopesim_inst_pkgs_path():
     """Get the path to the instrument packages directory."""
-    pkg_path = os.getenv("SCOPESIM_INST_PKGS")
-    if pkg_path and os.path.exists(pkg_path):
-        return os.path.abspath(pkg_path)
+    #pkg_path = os.getenv("SCOPESIM_INST_PKGS")
+    #if pkg_path and os.path.exists(pkg_path):
+    #    return os.path.abspath(pkg_path)
     
-    file = Path(__file__)
-    parent = file.parent.parent.parent.parent
-    filepath = os.path.join(parent, "inst_pkgs")
-    if os.path.exists(filepath):
-        return os.path.abspath(filepath)
-        
-    os.makedirs(filepath)
-    return os.path.abspath(filepath)
+    #file = Path(__file__)
+    #parent = file.parent.parent.parent.parent
+    #filepath = os.path.join(parent, "inst_pkgs")
+    #if os.path.exists(filepath):
+    #    return os.path.abspath(filepath)
+
+    current_dir = os.getcwd()
+    current_pkg = os.path.join(current_dir, "inst_pkgs")
+    if os.path.exists(current_pkg):
+        return Path(current_pkg)
+    else:
+        os.makedirs(current_pkg)
+        return os.path.abspath(current_pkg)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk.

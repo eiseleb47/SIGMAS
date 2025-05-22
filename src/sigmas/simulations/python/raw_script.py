@@ -9,7 +9,6 @@ import datetime
 from pathlib import Path
 from itertools import product, cycle, chain
 from collections.abc import Mapping
-from sigmas.simulations.utils import get_scopesim_inst_pkgs_path
 
 import numpy as np
 from more_itertools import value_chain
