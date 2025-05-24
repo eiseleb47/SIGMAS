@@ -18,4 +18,4 @@ Donut Simulation
 ----------------
 The Donut Simulations support a different type of Simulation. They make use of the `AstroDonut <https://github.com/Tearyt/AstroDonut>`_ Package. These aim to simulate '...synthetic elliptical ring structures...'.
 
-.. autofunction:: sigmas.simulations.donut_sim.create_one_nut
+.. autofunction:: sigmas.simulations.donut_sim.create_one_donut

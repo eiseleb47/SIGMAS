@@ -1,7 +1,7 @@
 import os
 import tempfile
-from .simulations.run_sim import Simulate
-from .simulations.donut_sim import create_one_nut
+from .simulations.run_sim import Yaml_Simulate
+from .simulations.donut_sim import create_one_donut
 import pathlib
 import re
 
@@ -53,7 +53,7 @@ def create_app(test_config=None):
                     return render_template('ifu.html')
 
             try:
-                Simulate(variables=variables)
+                Yaml_Simulate(variables=variables)
 
                 if lss_pattern.match(variables['mode']):
                     return render_template('lss.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
@@ -97,7 +97,7 @@ def create_app(test_config=None):
             "height": request.form.get('Height')}
 
             try:
-                create_one_nut(values)
+                create_one_donut(values)
                 return render_template("donut.html", fits_url=url_for('display_fits'))
             except Exception as e:
                 flash(f'Simulation failed: {str(e)}')

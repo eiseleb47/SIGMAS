@@ -7,7 +7,7 @@ import sys
 import scopesim as sim
 from pathlib import Path
 
-def Simulate(variables: dict):
+def Yaml_Simulate(variables: dict):
     """
     Simulate images for differnt combinations of source, mode and exposure time.
 
