@@ -5,7 +5,11 @@ import os
 import yaml
 from pathlib import Path
 def get_scopesim_inst_pkgs_path():
-    """Get the path to the instrument packages directory."""
+    """
+    Get the path to the instrument packages directory.
+    
+    :return: None
+    """
     #pkg_path = os.getenv("SCOPESIM_INST_PKGS")
     #if pkg_path and os.path.exists(pkg_path):
     #    return os.path.abspath(pkg_path)
@@ -37,7 +41,10 @@ def save_fits(file, path=""):
     return None
 
 def ensure_packages_installed():
-    """Ensure required packages are installed"""
+    """
+    Ensure required packages are installed in the current working directory, otherwise downloads the needed files.
+    :return: None
+    """
     required_packages = [
         "Armazones",
         "ELT", 
@@ -61,6 +68,15 @@ def ensure_packages_installed():
     return None
 
 def update_yaml(file, changes):
+    """
+    Update the contents of a yaml file.
+
+    :param file: The path to the yaml file.
+    :type file: str
+    :param changes: A dictionary containing the changes done to the yaml file. A colon is used for nesting.
+    :type changes: dict
+    :return: None
+    """
     def set_nested(data, key_path, value):
         for key in key_path[:-1]:
             if key not in data or not isinstance(data[key], dict):
@@ -77,9 +93,15 @@ def update_yaml(file, changes):
 
     with open(file, 'w') as f:
         yaml.dump(data, f, sort_keys=False)
-    return
+    return None
 
 def yaml_lss_updates(mode, source, exp):
+        """
+        A function containing the different yaml parameters used in the simulation.
+
+        :return: A nested dictionary containing the parameters.
+        :rtype: dict 
+        """
         return{
         # LSS mode updates
         ("lss_l", "simple_gal"): {"do.catg": "LM_LSS_SCI_RAW", "mode": mode, "source:name": source, "properties:dit": exp, "properties:filter_name": "L_spec", "properties:catg": "SCIENCE", "properties:tech": "LSS,LM", "properties:type": "OBJECT"},

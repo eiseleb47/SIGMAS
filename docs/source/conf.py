@@ -20,6 +20,13 @@ extensions = [
     'sphinx.ext.autodoc'
 ]
 
+autodoc_mock_imports = [
+    'scopesim',
+    'scopesim_templates',
+    'astropy',
+    'astrodonut'
+]
+
 templates_path = ['_templates']
 exclude_patterns = []
 

@@ -5,7 +5,15 @@ from astrodonut.donut_exporter import DonutExporter
 import tempfile, os
 from pathlib import Path
 
-def create_one_nut(values: dict):
+def create_one_donut(values: dict):
+    """
+    Create a Donut source and then run it through a scopesim Optical Train.
+    
+    :param values: A dictionary containing the parameters of the Donut.
+    :type values: dict
+    :return: The path to the created fits file
+    :rtype: str
+    """
     temp_dir = tempfile.gettempdir()
     fits_path = os.path.join(temp_dir, "simulation_result")
     fits_dir = Path(fits_path)
