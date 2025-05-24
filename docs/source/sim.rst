@@ -6,13 +6,13 @@ Direct Simulation
 -----------------
 Direct Simulations are closest to the underlying ScopeSim code. They have a small amount of changeable parameters, however they feed directly into the simulation engine without any layer in between. Theoretically every mode currently supported ScopeSim can be used.
 
-.. autofunction:: sigmas.simulations.sim.Simulate
+.. autofunction:: sigmas.simulations.direct_sim.Simulate
 
 Yaml file Simulation
 --------------------
 The yaml Simulations make use of the approach first implemented in the `METIS_Simulations <https://github.com/AstarVienna/METIS_Simulations>`_ Repository. They support a similar amount of parameters to the direct Simulations, however they work with a lot of ScopeSim parameters that are specific to METIS which have been set in the background. Thus these are most likely closer to science grade Simulations.
 
-.. autofunction:: sigmas.simulations.run_sim.Simulate
+.. autofunction:: sigmas.simulations.run_sim.Yaml_Simulate
 
 Donut Simulation
 ----------------
