@@ -80,8 +80,8 @@ def create_app(test_config=None):
             return "FITS file not found", 404
         return send_file(file_path, mimetype='image/fits')
     
-    @app.route('/secret', methods=['POST', 'GET'])
-    def secret():
+    @app.route('/donut', methods=['POST', 'GET'])
+    def donut():
         return render_template('donut.html')
     
     @app.route('/donut_sim', methods=['POST', 'GET'])

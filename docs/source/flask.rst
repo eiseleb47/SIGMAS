@@ -9,4 +9,4 @@ To use the *app factory* function outside of the main dashboard, import the fact
 
     app = create_app()
 
-This approach allows you to create multiple instances of your app with different configurations, which is useful for testing and deployment.
+This approach allows you to create multiple instances of your app with different configurations, which is useful for testing and development.

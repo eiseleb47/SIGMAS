@@ -1,6 +1,6 @@
 import tempfile
 import os
-from .utils import update_yaml, yaml_lss_updates, get_scopesim_inst_pkgs_path, ensure_packages_installed
+from .utils import update_yaml, yaml_updates, get_scopesim_inst_pkgs_path, ensure_packages_installed
 import re
 import subprocess
 import sys
@@ -40,8 +40,8 @@ def Yaml_Simulate(variables: dict):
 
     if lss_pattern.match(mode) or img_pattern.match(mode) or ifu_pattern.match(mode):
         key = (mode, source)
-        if key in yaml_lss_updates(mode=mode, source=source, exp=exp):
-            yaml_changes = {f"simulation:{k}": v for k, v in yaml_lss_updates(mode=mode, source=source, exp=float(exp)/4)[key].items()}
+        if key in yaml_updates(mode=mode, source=source, exp=exp):
+            yaml_changes = {f"simulation:{k}": v for k, v in yaml_updates(mode=mode, source=source, exp=float(exp)/4)[key].items()}
             update_yaml(yaml_path, yaml_changes)
         else:
             raise ValueError(f"Unsupported mode/source combination: {key}")

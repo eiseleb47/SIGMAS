@@ -6,8 +6,7 @@ import yaml
 from pathlib import Path
 def get_scopesim_inst_pkgs_path():
     """
-    Get the path to the instrument packages directory.
-    
+    Get the path to the instrument packages directory. Currently always looks in the current working directory.
     :return: None
     """
     #pkg_path = os.getenv("SCOPESIM_INST_PKGS")
@@ -43,6 +42,7 @@ def save_fits(file, path=""):
 def ensure_packages_installed():
     """
     Ensure required packages are installed in the current working directory, otherwise downloads the needed files.
+    
     :return: None
     """
     required_packages = [
@@ -58,7 +58,7 @@ def ensure_packages_installed():
         try:
             if not os.path.exists(os.path.join(pkg_path, pkg)):
                 print(f"Installing {pkg}")
-                sim.download_packages(pkg)
+                sim.download_packages(pkg, release="stable")
             else:
                 print(f"Found existing {pkg} installation")
         except Exception as e:
@@ -95,7 +95,7 @@ def update_yaml(file, changes):
         yaml.dump(data, f, sort_keys=False)
     return None
 
-def yaml_lss_updates(mode, source, exp):
+def yaml_updates(mode, source, exp):
         """
         A function containing the different yaml parameters used in the simulation.
 

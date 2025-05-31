@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=69.0.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "sigmas"
 version = "0.1.2a"
 description = "Simulation Interface for Generating METIS Astronomical Spectra"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10, <3.13"
 license = "GPL-3.0-or-later"
 authors = [
     {name = "Benjamin Eisele", email = "benjamin.eisele0101@gmail.com"}
@@ -18,12 +18,11 @@ classifiers = [
 ]
 dependencies = [
     "flask",
-    "scopesim",
+    "scopesim>=0.9.3",
     "scopesim_templates",
-    "astropy",
-    "numpy",
     "click",
     "astrodonut",
+    "astropy>=6.0.0",
 ]
 
 [project.scripts]

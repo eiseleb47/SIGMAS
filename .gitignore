@@ -24,6 +24,7 @@ inst_pkgs/
 src/sigmas/simulations/inst_pkgs/
 /src/sigmas/simulations/inst_pkgs/
 *.yaml
+*cache.sqlite
 
 # Mono auto generated files
 mono_crash.*

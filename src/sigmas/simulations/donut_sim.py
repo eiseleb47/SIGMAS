@@ -18,6 +18,8 @@ def create_one_donut(values: dict):
     fits_path = os.path.join(temp_dir, "simulation_result")
     fits_dir = Path(fits_path)
     donut_path = Path.joinpath(fits_dir, "donut.fits")
+    if not os.path.exists(fits_dir):
+        os.mkdir(fits_dir)
 
     try:
         # Create donut with parameter validation
@@ -30,6 +32,8 @@ def create_one_donut(values: dict):
             width=int(values["width"]),
             height=int(values["height"])
         )
+        
+        donut.ring()
 
         export_ring1 = DonutExporter(donut)
         export_ring1.save_to_fits(str(donut_path), overwrite=True)
