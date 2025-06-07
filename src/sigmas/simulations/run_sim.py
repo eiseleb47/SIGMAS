@@ -58,4 +58,4 @@ def Yaml_Simulate(variables: dict):
     ]
 
     result = subprocess.run(cmd, stderr=sys.stderr, stdout=sys.stdout,check=True, text=True)
-    return None
+    return result

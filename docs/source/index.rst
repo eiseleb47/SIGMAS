@@ -30,4 +30,3 @@ To start the server and open a new tab in your default Browser on the root page 
    sim
    flask
    utils
-   api
