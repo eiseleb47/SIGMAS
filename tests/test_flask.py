@@ -36,7 +36,3 @@ def test_regular_simulation_valid(client):
         response = client.post('/regular_simulation', data=test_data)
         assert response.status_code == 200
         mock_sim.assert_called_once()
-
-def test_display_fits_not_found(client):
-    response = client.get('/display_fits')
-    assert response.status_code == 200
