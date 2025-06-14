@@ -5,16 +5,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}"/>
         <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
         <title>SIGMAS</title>
     </head>
     <body>
         <h1>SIGMAS - Simulation Interface for Generating METIS Astronomical Spectra</h1>
         <br>
-        <div class="button-container">
+        <div class="toggle-container">
+            <button class="toggle-btn active" id="showButtons">Main Simulations</button>
+            <button class="toggle-btn" id="showOther">Calibrations</button>
+        </div>
+        <div class="button-container" id="button-container">
             <a href="{{ url_for('lss') }}" class="welcome-button">LSS Simulations</a>
             <a href="{{ url_for('img') }}" class="welcome-button">Imaging Simulations</a>
             <a href="{{ url_for('ifu') }}" class="welcome-button">IFU Simulations</a>
             <a href="{{ url_for('donut') }}" class="welcome-button">Donut Simulations</a>
+        </div>
+        <div class="button-container" id="calibs" style="display: none">
+            <a href="{{ url_for('lss') }}" class="welcome-button">Darks</a>
+            <a href="{{ url_for('img') }}" class="welcome-button">Lamp Flats</a>
+            <a href="{{ url_for('ifu') }}" class="welcome-button">Distortion</a>
+            <a href="{{ url_for('donut') }}" class="welcome-button">RSRF</a>
         </div>
     </body>
 </html>

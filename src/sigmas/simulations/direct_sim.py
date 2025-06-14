@@ -6,8 +6,9 @@ from astropy import units as u
 from astropy.io import fits
 from .utils import get_scopesim_inst_pkgs_path, ensure_packages_installed
 from .utils import starFieldM, starFieldX, starFieldY, starFieldT
+from pathlib import Path
 
-def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
+def Simulate(mode: str, exp: float, pkg_path: str="", object=None, fits=None, input_file=None):
     """
     Simulate the observation of a source with the specified mode and exposure time.
     
@@ -20,11 +21,13 @@ def Simulate(mode: str, exp: float, object=None, fits=None, input_file=None):
     :return: hdu fits object.
     :rtype: fits.HUDList
     """
-    
-    # Set up the simulation
-    sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()
+    print(pkg_path)
+    if len(pkg_path) == 0:
+        pkg_path = Path.joinpath(Path.home(),'.sigmas_pkg')
 
-    ensure_packages_installed()
+    ensure_packages_installed(file_path=pkg_path)
+
+    sim.rc.__config__["!SIM.file.local_packages_path"] = pkg_path
 
     cmds = sim.UserCommands(use_instrument="METIS", set_modes=[mode])
     cmds["!OBS.dit"] = float(exp)/4

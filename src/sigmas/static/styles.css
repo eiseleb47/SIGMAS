@@ -141,30 +141,7 @@ label {
     border-radius: 0 0 8px 8px;
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.welcome-button {
-    background-color: var(--blue);
-    color: var(--base);
-    border: none;
-    border-radius: 8px;
-    padding: 1.2rem 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.2s;
-}
-
-.welcome-button:hover {
-    background-color: var(--lavender);
-}
-
-.button-container {
+.button-container{
     display: flex;
     justify-content: center;
     gap: 2rem;
@@ -210,6 +187,35 @@ label {
 .home-button:hover {
     background-color: var(--lavender);
     color: var(--base);
+}
+
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.toggle-btn {
+    background-color: var(--blue);
+    color: var(--base);
+    border: none;
+    border-radius: 8px;
+    padding: 1.2rem 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.5s;
+}
+
+.toggle-btn.active {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.toggle-btn:hover {
+    background-color: var(--lavender);
 }
 
 .flashes {

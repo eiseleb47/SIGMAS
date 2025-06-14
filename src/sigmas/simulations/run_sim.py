@@ -52,4 +52,4 @@ def Yaml_Simulate(variables: dict, pkg_path):
     
     runRecipes(inputYAML=yaml_path, outputDir=fits_file_path)
 
-    return 
+    return None

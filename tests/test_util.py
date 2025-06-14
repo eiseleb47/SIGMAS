@@ -1,17 +1,15 @@
-import pytest
+from pathlib import Path
 import tempfile
 import yaml
+import os
 from sigmas.simulations.utils import (
     get_scopesim_inst_pkgs_path,
     ensure_packages_installed,
     save_fits,
     update_yaml
 )
-from unittest.mock import patch, mock_open
-import os
-
-def test_get_scopesim_inst_pkgs_path():
-    path = get_scopesim_inst_pkgs_path()
+def test_get_scopesim_inst_pkgs_path(Path=Path.home()):
+    path = get_scopesim_inst_pkgs_path(Path)
     assert os.path.exists(path)
 
 def test_update_yaml_creates_nested_keys():

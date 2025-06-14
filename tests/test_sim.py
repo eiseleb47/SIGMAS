@@ -5,12 +5,13 @@ from sigmas.simulations.run_sim import Yaml_Simulate
 from astropy.io import fits
 from subprocess import CompletedProcess
 import os
+from pathlib import Path
 
 def test_hdu():
     mode = "lss_l"
     exp = 300
     object = "Star Field"
-    result = Simulate(mode, exp, object)
+    result = Simulate(mode=mode, exp=exp, object=object)
 
     assert isinstance(result, fits.HDUList)
 
@@ -27,8 +28,9 @@ def test_yaml_simulate_valid():
         "source": "simple_star12",
         "exposure_time": "300"
     }
-    result = Yaml_Simulate(variables=test_variables)
-    assert isinstance(result, type(CompletedProcess("test", None)))
+    test_path = str(Path.home())
+    result = Yaml_Simulate(variables=test_variables, pkg_path=test_path)
+    assert isinstance(result, type(None))
 
 # Test invalid parameters handling
 def test_yaml_simulate_invalid():
@@ -37,8 +39,9 @@ def test_yaml_simulate_invalid():
         "source": "invalid_source",
         "exposure_time": "-1"
     }
+    test_path = str(Path.home())
     with pytest.raises(ValueError):
-        Yaml_Simulate(variables=test_variables)
+        Yaml_Simulate(variables=test_variables, pkg_path=test_path)
 
 # Test mode pattern matching
 def test_mode_pattern_matching():
