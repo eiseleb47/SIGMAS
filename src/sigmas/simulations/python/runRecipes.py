@@ -6,18 +6,16 @@
 from pathlib import Path
 import yaml
 import argparse
-import simulationDefinitions as sd
+from . import simulationDefinitions as sd
 import json
-from raw_script import simulate
+from .raw_script import simulate
 from astropy.time import Time, TimeDelta
 from itertools import product
 from astar_utils import NestedMapping
 from datetime import datetime
 import numpy as np
 from astropy.io import fits
-import astropy
-import copy
-from multiprocessing import Pool,Process,Manager
+from multiprocessing import Pool
 
 class runRecipes():
 
@@ -29,110 +27,29 @@ class runRecipes():
         self.tDelt = TimeDelta(0, format='sec') 
         self.allFileNames = []
         self.allmjd = []
-        
-    def parseCommandLine(self,args):
-
+        self.params = {}
+    
+    def setParms(self, **params):
         """
-        Parse the command line options to get the paramters to run the set of simulations
-        Creates a dictionary, params, containing all command line options
+        Set parameters directly from keyword arguments or a dictionary.
         """
-        
-        parser = argparse.ArgumentParser()
-
-        params = {}
-
-        parser.add_argument('-i', '--inputYAML', type=str,
-                            help='input YAML File')
-        parser.add_argument('-o', '--outputDir', type=str,
-                            help='output directory')
-        parser.add_argument('-s', '--small', action = "store_true",
-                            default=False,
-                            help=('use detectors of 32x32 pixels; ' +
-                                  'for running in the continuous integration'))
-        
-        parser.add_argument('-e', '--doStatic', action = "store_true",
-                            default=False,
-                            help=('Generate prototypes for static/external calibration files'))
-
-        parser.add_argument('-c', '--catg', type=str,
-                            help='comma-separated list of selected output file categories')
-        parser.add_argument('--doCalib', type=int,
-                            default=0, help='automatically generate darks and flats for the dataset. Will generate N of each type')
-
-        # expects either 1 or a date stamp
-        parser.add_argument('--sequence', type=str,
-                            default=False, help='options for generating timestamps. Set to a date in the form yyyy-mm-dd hh:mm:ss to start from a specific date, or 1 to use the first dateobs in the YAML file.')
-
-        # if set, option to true
-        parser.add_argument('--testRun', action="store_true",
-                            help='run the script without executing simulate to check input')
-
-        parser.add_argument('-f', '--calibFile', type=str,
-                            default = None,
-                            help='File to dump calibration file YAML to')
-        parser.add_argument('-n', '--nCores', type=int,
-                            default = 1,
-                            help='number of cores for parallel processing')
-
-        
-        args = parser.parse_args()
-        if args.inputYAML:
-            params['inputYAML'] = args.inputYAML
-        else:
-            params['inputYAML'] = Path(__file__).parents[1] / "YAML/allRecipes.yaml/"
-
-        if args.outputDir:
-            params['outputDir'] = args.outputDir
-        else:
-            params['outputDir'] = Path(__file__).parents[1] / "output/"
-        if(args.sequence):
-            if(args.sequence == "1"):
-                params['startMJD'] = None
-                params['sequence'] = True
-            else:
-                params['startMJD'] = args.sequence
-                params['sequence'] = True
-        else:
-            params['sequence'] = False
-            params['startMJD'] = None
-        
-        if(args.doCalib):
-            params['doCalib'] = args.doCalib
-        else:
-            params['doCalib'] = 0
-        
-        if args.catg:
-            params['catglist'] = args.catg.split(',')
-        else:
-            params['catglist'] = None
-        
-            
-        params['small'] = args.small
-
-        params['doStatic'] = args.doStatic
-                            
-        params['testRun'] = args.testRun
-
-        params['calibFile'] = args.calibFile
-
-        if args.nCores:
-            params['nCores'] = args.nCores
-        else:
-            params['nCores'] = 1
+        self.params = params
         
         print(f"Starting Simulations")
         print(f"   input YAML = {params['inputYAML']}, output directory =  {params['outputDir']}")
-        if(params['startMJD'] is not None):
-            print(f"  observation sequence starting at {params['startMJD']}")
-        elif(params['sequence']):
+        if(params['sequence'] == "1"):
+            params['startMJD'] = None
+            params['sequence'] = True
+        else:
+            params['startMJD'] = params['sequence']
+            params['sequence'] = True
+        if(params['sequence']):
             print(f"  Observation sequence will start from first date in YAML file")
         else:
             print(f"  Observation dates will be taken from YAML file if given")
         print(f"  Automatically generated darks and flats {params['doCalib']}")
         print(f"  Small output option {params['small']}")
         print(f"  Generate External Calibs {params['doCalib']}")
-    
-        self.params = params
 
     def loadYAML(self):
 
@@ -157,16 +74,8 @@ class runRecipes():
 
         """filter a dictionary of recipes"""
 
-        if self.params['catglist'] is None:
-            
-            dorcps = allrcps
-        else:
-            dorcps = {}
-            for catg in self.params['catglist']:
-                if catg in allrcps.keys():
-                    dorcps[catg] = allrcps[catg]
-                else:
-                    raise ValueError(f"ERROR: {catg} is not a supported product category")
+        dorcps = allrcps
+
         return dorcps
     
     def validateYAML(self):
@@ -276,13 +185,13 @@ class runRecipes():
     
         if(np.all(["DARK" not in props['type'],"PERSISTENCE" not in props['type']])):
             if(",LM" in props['tech']):
-                df = copy.deepcopy(sd.DARKLM)
+                df = json.loads(json.dumps(sd.DARKLM))
                 df['mode'] = "img_lm"
             elif(",N" in props['tech']):
-                df = copy.deepcopy(sd.DARKN)
+                df = json.loads(json.dumps(sd.DARKN))
                 df['mode'] = "img_n"
             elif(np.any(["LMS" in props['tech'],"IFU" in props['tech']])):
-                df = copy.deepcopy(sd.DARKIFU)
+                df = json.loads(json.dumps(sd.DARKIFU))
                 df['mode'] = "lms"
             else:
                 return{}
@@ -290,6 +199,7 @@ class runRecipes():
             df['properties']['dit'] = props['dit']
             df['properties']['ndit'] = props['ndit']
             df['properties']['nObs'] = self.params['doCalib']
+
 
             return df
         else:
@@ -301,13 +211,13 @@ class runRecipes():
     
         if(np.all(["DARK" not in props['type'],"PERSISTENCE" not in props['type']])):
             if(",LM" in props['tech']):
-                df = copy.deepcopy(sd.WCUDARKLM)
+                df = json.loads(json.dumps(sd.WCUDARKLM))
                 df['mode'] = "img_lm"
             elif(",N" in props['tech']):
-                df = copy.deepcopy(sd.WCUDARKN)
+                df = json.loads(json.dumps(sd.WCUDARKN))
                 df['mode'] = "img_n"
             elif(np.any(["LMS" in props['tech'],"IFU" in props['tech']])):
-                df = copy.deepcopy(sd.WCUDARKIFU)
+                df = json.loads(json.dumps(sd.WCUDARKIFU))
                 df['mode'] = "lms"
             else:
                 return{}
@@ -325,10 +235,10 @@ class runRecipes():
     
         if(np.all(["DARK" not in props['type'], "FLAT" not in props['type'],"DETLIN" not in props['type'],"LMS" not in props['type'],"PERSISTENCE" not in props['type']])):
             if(",LM" in props['tech']):
-                df = copy.deepcopy(sd.SKYFLATLM)
+                df = json.loads(json.dumps(sd.SKYFLATLM))
                 df['mode'] = "img_lm"
             elif(",N" in props['tech']):
-                df = copy.deepcopy(sd.SKYFLATN)
+                df = json.loads(json.dumps(sd.SKYFLATN))
                 df['mode'] = "img_n"
             else:
                 return{}
@@ -348,10 +258,10 @@ class runRecipes():
         """determine what sort of lamp flat, if any, is needed for a YAML entry and return a recipe dictionary for it"""
         if(np.all(["DARK" not in props['type'], "FLAT" not in props['type'],"DETLIN" not in props['type'],"LMS" not in props['type'],"PERSISTENCE" not in props['type']])):
             if(",LM" in props['tech']):
-                df = copy.deepcopy(sd.LAMPFLATLM)
+                df = json.loads(json.dumps(sd.LAMPFLATLM))
                 df['mode'] = "img_lm"
             elif(",N" in props['tech']):
-                df = copy.deepcopy(sd.LAMPFLATN)
+                df = json.loads(json.dumps(sd.LAMPFLATN))
                 df['mode'] = "img_n"
             else:
                 return{}
@@ -383,6 +293,9 @@ class runRecipes():
         skyFlats = []
         lampFlats = []
 
+        #list of modes that use WCU OFF
+        wcuModes = ["SLITLOSS","DETLIN","DISTORTION","RSRF","CHOPHOME","PUPIL","WAVE","FLAT,LAMP"]
+
         # assemble a list of the dark / skyflat / lampflat recipe dicionaries
 
         ii=0
@@ -401,7 +314,7 @@ class runRecipes():
                     props["ndfilter_name"] = "open"
 
 
-                if(np.any(["SLITLOSS" in props["type"],"DETLIN" in props["type"], "DISTORTION" in props["type"]])):
+                if(props["type"] in wcuModes):
 
                     wcuDarks.append(self.calcWcuDark(props))
                     
@@ -432,7 +345,7 @@ class runRecipes():
         for rcp in np.unique([json.dumps(i, sort_keys=True) for i in wcuDarks]):
             drcp = json.loads(rcp)
             if bool(drcp):
-                label = f'd{nLab}'
+                label = f'w{nLab}'
                 nLab += 1
                 self.calibSet[label] = drcp
 
@@ -614,7 +527,6 @@ class runRecipes():
         """Calls _run for calibration recipes"""
 
         self._run(self.calibSet)
-        
 
     def _run(self,dorcps):
         
@@ -657,6 +569,8 @@ class runRecipes():
                 
                 combodict = dict(zip(expanded, combo))
                 props = recipe["properties"] | combodict
+
+                
                 # a blank value of ndfilter_name if not explicitly given
                 try:
                     nfname = props["ndfilter_name"]
@@ -702,10 +616,10 @@ class runRecipes():
                             print("No appropriate starting time found; exiting")
                             return
     
-    
+
                 # for nObs exposures of each set of parameters
                 for _ in range(nObs):        
-    
+
                     # note that tDelt = 0 if we've explicitly set it above
                     self.tObs = self.tObs + self.tDelt
 
@@ -722,20 +636,24 @@ class runRecipes():
                     print("Starting simulate()")
                     print(f"    fname={fname}")
                     print(f'    source =  {recipe["source"]}')
-    
+
                     # get kwargs for scopeSim
                     kwargs = NestedMapping({"OBS": props})
+
+                    
                     print(f"    dit={props['dit']},ndit={props['ndit']},catg={props['catg']},tech={props['tech']},type={props['type']},filter_name={props['filter_name']}, ndfilter_name={props['ndfilter_name']}")
 
                     # keep track of the list of arguments
-                    allArgs.append((fname,mode,kwargs,recipe["source"],self.params["small"]))
-    
-        # and run the
+                    if("wcu" not in recipe.keys()):
+                       recipe["wcu"] = None
+                    #simulate(fname, mode, kwargs,recipe["wcu"], source=recipe["source"], small=self.params['small'])
 
-
-        if not self.params['testRun']:
+                    allArgs.append((self.params["scopesim_path"],fname,mode,kwargs,recipe["wcu"],recipe["source"],self.params["small"]))
+        
+        if(not self.params['testRun']):
             nCores = self.params['nCores']
-
+        
+            
             with Pool(nCores) as pool:
                 pool.starmap(simulate, allArgs)
                 #simulate(fname, mode, kwargs, source=recipe["source"], small=self.params['small'])

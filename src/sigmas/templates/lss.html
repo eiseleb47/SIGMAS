@@ -33,20 +33,18 @@
           <div class="form-top">
             <div class="form-left">
               <label for="val1">Exposure Time:</label>
-              <input type="number" id="val1" name="exposure_time" step="any" min=0>
+              <input type="number" id="val1" name="exposure_time" step="any" min=0 placeholder="eg. 3">
+              <label for="val2">Package Path (optional):</label>
+              <input type="text" id="val2" name="package_path" placeholder="eg. $HOME/...">
             </div>
             <div class="form-right">
               <label for="source" class="dropdown_label">Choose your source:</label>
-              <br>
               <select name="source" id="source" class="dropdown">
                 <option value="simple_star8">Standard Star</option>
                 <option value="simple_gal">Elliptical Galaxy</option>
                 <option value="empty_sky">Empty Sky</option>
               </select>
-              <br>
-              <br>
               <label for="mode" class="dropdown_label">Choose observing mode:</label>
-              <br>
               <select name="mode" id="mode" class="dropdown">
                 <option value="lss_l">LSS L mode</option>
                 <option value="lss_n">LSS N mode</option>

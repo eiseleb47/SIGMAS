@@ -4,28 +4,22 @@ import scopesim as sim
 import os
 import yaml
 from pathlib import Path
-def get_scopesim_inst_pkgs_path():
+def get_scopesim_inst_pkgs_path(path):
     """
     Get the path to the instrument packages directory. Currently always looks in the current working directory.
     :return: None
     """
-    #pkg_path = os.getenv("SCOPESIM_INST_PKGS")
-    #if pkg_path and os.path.exists(pkg_path):
-    #    return os.path.abspath(pkg_path)
+    pkg_path = os.getenv("SCOPESIM_INST_PKGS")
+    if pkg_path and os.path.exists(pkg_path):
+        return os.path.abspath(pkg_path)
     
-    #file = Path(__file__)
-    #parent = file.parent.parent.parent.parent
-    #filepath = os.path.join(parent, "inst_pkgs")
-    #if os.path.exists(filepath):
-    #    return os.path.abspath(filepath)
-
-    current_dir = os.getcwd()
-    current_pkg = os.path.join(current_dir, "inst_pkgs")
-    if os.path.exists(current_pkg):
-        return Path(current_pkg)
     else:
-        os.makedirs(current_pkg)
-        return os.path.abspath(current_pkg)
+        package_dir = path
+        if os.path.exists(package_dir):
+            return Path(package_dir)
+        else:
+            os.makedirs(package_dir)
+            return Path(package_dir)
 
 def save_fits(file, path=""):
     '''Save a fits file to disk.
@@ -39,7 +33,7 @@ def save_fits(file, path=""):
     file.writeto(path + "output.fits", overwrite=True)
     return None
 
-def ensure_packages_installed():
+def ensure_packages_installed(file_path):
     """
     Ensure required packages are installed in the current working directory, otherwise downloads the needed files.
     
@@ -50,7 +44,7 @@ def ensure_packages_installed():
         "ELT", 
         "METIS"
     ]
-    pkg_path = get_scopesim_inst_pkgs_path()
+    pkg_path = get_scopesim_inst_pkgs_path(path=file_path)
     
     print(f"Package path is: {pkg_path}")
     
@@ -58,7 +52,7 @@ def ensure_packages_installed():
         try:
             if not os.path.exists(os.path.join(pkg_path, pkg)):
                 print(f"Installing {pkg}")
-                sim.download_packages(pkg, release="stable")
+                sim.download_packages(pkg, release="stable", save_dir=pkg_path)
             else:
                 print(f"Found existing {pkg} installation")
         except Exception as e:

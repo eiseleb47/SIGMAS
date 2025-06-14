@@ -6,8 +6,9 @@ import subprocess
 import sys
 import scopesim as sim
 from pathlib import Path
+from .python.run_recipes import runRecipes
 
-def Yaml_Simulate(variables: dict):
+def Yaml_Simulate(variables: dict, pkg_path):
     """
     Simulate images for differnt combinations of source, mode and exposure time.
 
@@ -15,9 +16,10 @@ def Yaml_Simulate(variables: dict):
     :type variables: dict
     :rtype: None
     """
-    ensure_packages_installed()
-    
-    sim.rc.__config__["!SIM.file.local_packages_path"] = get_scopesim_inst_pkgs_path()
+    if len(pkg_path) == 0:
+        pkg_path = Path.joinpath(Path.home(),'.sigmas_pkg')
+
+    ensure_packages_installed(file_path=pkg_path)
 
     temp_dir = tempfile.gettempdir()
     fits_file_path = os.path.join(temp_dir, "simulation_result")
@@ -47,15 +49,7 @@ def Yaml_Simulate(variables: dict):
             raise ValueError(f"Unsupported mode/source combination: {key}")
     else:
         raise ValueError("Unsupported mode(How did you even select that?)")
-    cmd = [
-        sys.executable,
-        f"{this_dir}/python/run_recipes.py",
-        f"--inputYAML={yaml_path}",
-        "--outputDir", f"{fits_file_path}",
-        "--doCalib=0",
-        "--sequence=1",
-        "--nCores=4"
-    ]
+    
+    runRecipes(inputYAML=yaml_path, outputDir=fits_file_path)
 
-    result = subprocess.run(cmd, stderr=sys.stderr, stdout=sys.stdout,check=True, text=True)
-    return result
+    return 

@@ -42,6 +42,7 @@ def create_app(test_config=None):
             "mode": request.form.get('mode'),
             "source": request.form.get('source'),
             "exposure_time": request.form.get('exposure_time')}
+            path = request.form.get('package_path')
 
             if not variables['exposure_time']:
                 flash('Please enter an exposure time!')
@@ -53,7 +54,7 @@ def create_app(test_config=None):
                     return render_template('ifu.html')
 
             try:
-                Yaml_Simulate(variables=variables)
+                Yaml_Simulate(variables=variables, pkg_path=path)
 
                 if lss_pattern.match(variables['mode']):
                     return render_template('lss.html', fits_url=url_for('display_fits'), src=variables["source"], mode=variables["mode"])
