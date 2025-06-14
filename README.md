@@ -31,6 +31,6 @@ pip install sigmas
 sigmas
 ```
 The following start page will open in a new tab:
-![Home page when first starting SIGMAS](https://github.com/user-attachments/assets/d498dadf-9bca-4520-828b-0b2e9e6de37a)
+![Home page when first starting SIGMAS](https://github.com/user-attachments/assets/c11b4eea-02eb-4f0a-bd0a-4dfc1bdc7740)
 The different modes each have their own page where one can choose the simulation parameters (e.g. IMG mode):
 ![SIGMAS page used for IMG simulations](https://github.com/user-attachments/assets/8e08bbf5-3f4a-44bf-baf3-ea72b0c86cfd)
