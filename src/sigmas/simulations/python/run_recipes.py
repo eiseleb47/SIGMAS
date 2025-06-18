@@ -10,7 +10,18 @@ import sys
 from . import makeCalibPrototypes
 from pathlib import Path
 
-def runRecipes(inputYAML="test.yaml"    , outputDir="output/", small=False, doStatic=False, doCalib=0, sequence="1", testRun=False, calibFile=None, nCores=8, scopesim_path=Path.home() / ".sigmas_pkg", **kwargs):
+def runRecipes_with_pars(inputYAML=Path(__file__).parent.parent / "YAML" / "allRecipes.yaml", 
+                                       outputDir="output/", 
+                                       small=False, 
+                                       doStatic=True, 
+                                       catglist=None,
+                                       doCalib=1, 
+                                       sequence='1', 
+                                       testRun=False, 
+                                       calibFile=None, 
+                                       nCores=8, 
+                                       irdb_path='./inst_pks', 
+                                       **kwargs):
     """
     Run a set of recipes with explicit arguments instead of command line.
     Arguments:
@@ -26,11 +37,12 @@ def runRecipes(inputYAML="test.yaml"    , outputDir="output/", small=False, doSt
 
     # Set parameters directly
     simulationSet.setParms(
-        scopesim_path=scopesim_path,
+        irdb_path=irdb_path,
         inputYAML=inputYAML,
         outputDir=outputDir,
         small=small,
         doStatic=doStatic,
+        catglist=catglist,
         doCalib=doCalib,
         sequence=sequence,
         testRun=testRun,
@@ -75,3 +87,11 @@ def runRecipes(inputYAML="test.yaml"    , outputDir="output/", small=False, doSt
 
     if simulationSet.params['doStatic']:
         makeCalibPrototypes.generateStaticCalibs(simulationSet.params['outputDir'])
+
+def runRecpies_with_argv(argv):
+    simulationSet = rr.runRecipes()
+    simulationSet.parseCommandLine(argv[1:])
+    runRecipes_with_pars(**simulationSet.params)
+        
+if __name__ == "__main__":
+    runRecpies_with_argv(sys.argv)

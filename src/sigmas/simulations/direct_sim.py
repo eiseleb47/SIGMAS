@@ -21,9 +21,8 @@ def Simulate(mode: str, exp: float, pkg_path: str="", object=None, fits=None, in
     :return: hdu fits object.
     :rtype: fits.HUDList
     """
-    print(pkg_path)
     if len(pkg_path) == 0:
-        pkg_path = Path.joinpath(Path.home(),'.sigmas_pkg')
+        pkg_path = Path.home() / '.sigmas_pkg'
 
     ensure_packages_installed(file_path=pkg_path)
 
