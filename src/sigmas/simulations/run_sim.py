@@ -6,7 +6,7 @@ import subprocess
 import sys
 import scopesim as sim
 from pathlib import Path
-from .python.run_recipes import runRecipes
+from .python.run_recipes import runRecipes_with_pars
 
 def Yaml_Simulate(variables: dict, pkg_path):
     """
@@ -50,6 +50,6 @@ def Yaml_Simulate(variables: dict, pkg_path):
     else:
         raise ValueError("Unsupported mode(How did you even select that?)")
     
-    runRecipes(inputYAML=yaml_path, outputDir=fits_file_path)
+    runRecipes_with_pars(inputYAML=yaml_path, outputDir=fits_file_path, irdb_path=Path.home() / ".sigmas_pkgs")
 
     return None

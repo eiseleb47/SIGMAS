@@ -141,14 +141,17 @@ label {
     border-radius: 0 0 8px 8px;
 }
 
-.button-container{
+.button-container, .toggle-container {
     display: flex;
     justify-content: center;
     gap: 2rem;
+}
+
+.button-container{
     margin-top: 3rem;
 }
 
-.welcome-button {
+.welcome-button, .toggle-btn {
     background-color: var(--blue);
     color: var(--base);
     border: none;
@@ -157,7 +160,9 @@ label {
     font-weight: bold;
     cursor: pointer;
     text-decoration: none;
-    transition: background-color 0.2s;
+    transition: background-color 0.5s;
+    min-width: 160px;
+    text-align: center;
 }
 
 .welcome-button:hover {
@@ -166,7 +171,7 @@ label {
 
 .home-button {
     position: fixed;
-    top: 2.8rem;  /* Slightly adjusted to align with title */
+    top: 2.8rem;
     left: 2rem;
     background-color: var(--surface0);
     color: var(--text);
@@ -190,22 +195,7 @@ label {
 }
 
 .toggle-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.toggle-btn {
-    background-color: var(--blue);
-    color: var(--base);
-    border: none;
-    border-radius: 8px;
-    padding: 1.2rem 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.5s;
+    margin-bottom: 3rem;
 }
 
 .toggle-btn.active {
