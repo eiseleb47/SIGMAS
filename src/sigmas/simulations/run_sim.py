@@ -14,10 +14,11 @@ def Yaml_Simulate(variables: dict, pkg_path):
 
     :param variables: A dictionary containing values for the mode, source and exposure time.
     :type variables: dict
+    :param pkg_path: The path to where the IRDB packages are to be installed, defaults to a subdirectory of the home directory.
     :rtype: None
     """
     if len(pkg_path) == 0:
-        pkg_path = Path.home() / '.sigmas_pkg'
+        pkg_path = Path.home() / '.inst_pkgs'
 
     ensure_packages_installed(file_path=pkg_path)
 
@@ -48,8 +49,8 @@ def Yaml_Simulate(variables: dict, pkg_path):
         else:
             raise ValueError(f"Unsupported mode/source combination: {key}")
     else:
-        raise ValueError("Unsupported mode(How did you even select that?)")
+        raise ValueError("Unsupported mode (How did you even select that?)")
     
-    runRecipes_with_pars(inputYAML=yaml_path, outputDir=fits_file_path, irdb_path=Path.home() / ".sigmas_pkgs")
+    runRecipes_with_pars(inputYAML=yaml_path, outputDir=fits_file_path, irdb_path=pkg_path, doStatic=False, doCalib=0)
 
     return None

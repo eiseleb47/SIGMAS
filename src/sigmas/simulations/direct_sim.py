@@ -8,7 +8,7 @@ from .utils import get_scopesim_inst_pkgs_path, ensure_packages_installed
 from .utils import starFieldM, starFieldX, starFieldY, starFieldT
 from pathlib import Path
 
-def Simulate(mode: str, exp: float, pkg_path: str="", object=None, fits=None, input_file=None):
+def Simulate(mode: str, exp: float, pkg_path="", object=None, fits=None, input_file=None):
     """
     Simulate the observation of a source with the specified mode and exposure time.
     
@@ -22,7 +22,7 @@ def Simulate(mode: str, exp: float, pkg_path: str="", object=None, fits=None, in
     :rtype: fits.HUDList
     """
     if len(pkg_path) == 0:
-        pkg_path = Path.home() / '.sigmas_pkg'
+        pkg_path = Path.home() / '.inst_pkgs'
 
     ensure_packages_installed(file_path=pkg_path)
 
